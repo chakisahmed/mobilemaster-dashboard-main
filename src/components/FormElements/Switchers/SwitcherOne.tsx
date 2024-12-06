@@ -1,22 +1,25 @@
 import { useState } from "react";
 
-const SwitcherOne = () => {
+const SwitcherOne = ({ id, onChange }: { id: string, onChange: (value: boolean) => void }) => {
   const [enabled, setEnabled] = useState<boolean>(false);
+
+  const handleChange = () => {
+    setEnabled(!enabled);
+    onChange(!enabled);
+  };
 
   return (
     <div>
       <label
-        htmlFor="toggle1"
+        htmlFor={id}
         className="flex cursor-pointer select-none items-center"
       >
         <div className="relative">
           <input
             type="checkbox"
-            id="toggle1"
+            id={id}
             className="sr-only"
-            onChange={() => {
-              setEnabled(!enabled);
-            }}
+            onChange={handleChange}
           />
           <div className="block h-8 w-14 rounded-full bg-gray-3 dark:bg-[#5A616B]"></div>
           <div
