@@ -3,6 +3,7 @@ import React, { useState, ReactNode, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { checkToken } from "@/utils/fetchWithToken";
+import axios from "axios";
 
 
 export default function DefaultLayout({
@@ -11,13 +12,27 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (!checkToken()) {
+
+    axios.get("/api/isLogged").then(async (res) => {
+      console.log("res: ",res);
+
+      setLoading(false);
+      
+    }
+    ).catch((err) => {
+      console.log("err: ",err);
       window.location.href = "/auth/signin";
     }
+    );
   }, []);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
+
     <>
       {/* <!-- ===== Page Wrapper Star ===== --> */}
       <div className="flex h-screen overflow-hidden">

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 // import { clientLoginApi } from "@/utils/clientLoginApi";
-import { loginApi } from "@/utils/loginApi";
+import {login} from "@/utils/loginApi";
 
 export default function SigninWithPassword() {
   const [data, setData] = useState({
@@ -15,9 +15,9 @@ export default function SigninWithPassword() {
     console.log(username, password);
   
     try {
-      const response = await loginApi(username, password);
-      console.log(response);
-      //window.location.href = "/";
+      const response = await login(username, password);
+      //console.log(response);
+      window.location.href = "/";
     } catch (error) {
       console.error(error);
     }

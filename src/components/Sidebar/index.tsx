@@ -48,6 +48,51 @@ const menuGroups = [
       {
         icon: (
           <svg
+            className="text- fill-current"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            
+           
+          </svg>
+        ),
+        label: "Catalog",
+        route: "#",
+        children: [
+          { label: "Products", route: "/products" },
+          { label: "Categories", route: "/categories" },
+        ],
+      },
+      {
+        icon: (
+          <svg
+            className="text- fill-current"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            
+           
+          </svg>
+        ),
+        label: "Mobile App",
+        route: "#",
+        children: [
+          { label: "Customize Home Page", route: "/products" },
+          { label: "Manage Banners", route: "/manage_banners" },
+          { label: "Manage Featured Categories", route: "/featuredcategories" },
+          { label: "Manage Featured Products", route: "/carousel" },
+        ],
+      },
+
+      {
+        icon: (
+          <svg
             className="fill-current"
             width="24"
             height="24"
@@ -314,18 +359,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5 xl:py-10">
           <Link href="/">
             <Image
-              width={176}
-              height={32}
-              src={"/images/logo/logo-dark.svg"}
+              width={166}
+              height={25}
+              src={"/images/logo/WAMIA.png"}
               alt="Logo"
               priority
               className="dark:hidden"
               style={{ width: "auto", height: "auto" }}
             />
             <Image
-              width={176}
-              height={32}
-              src={"/images/logo/logo.svg"}
+              width={166}
+              height={25}
+              src={"/images/logo/WAMIA.png"}
               alt="Logo"
               priority
               className="hidden dark:block"
