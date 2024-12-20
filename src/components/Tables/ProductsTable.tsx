@@ -197,7 +197,7 @@ const ProductsTable = () => {
             <p className="text-body-sm font-medium text-dark dark:text-dark-6">
               {product.custom_attributes.find( 
                 (attr) => attr.attribute_code === "category_ids"
-              )?.value.map((id: string) => mapIdToCategory(Number(id))).join(", ")}
+              )?.value.map((id: string) => mapIdToCategory(Number(id))).slice(2).join(", ")}
             </p>
           </div>
           <div className="col-span-1 flex items-center">

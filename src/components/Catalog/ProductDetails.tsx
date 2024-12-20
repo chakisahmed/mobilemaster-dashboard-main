@@ -45,7 +45,7 @@ const ProductDetails = () => {
               <input type="text" className="w-full p-2 mt-1 rounded-lg border border-gray-300" value={product?.name}/>
             </div>
             <div className="mb-2">
-                <RichTextEditor initialValue={product?.custom_attributes.find((att) => att.attribute_code=="description")?.value} height={200}/>
+                <RichTextEditor initialValue={product?.custom_attributes.find((att) => att.attribute_code=="short_description")?.value} height={200}/>
               </div>
           </div>
     

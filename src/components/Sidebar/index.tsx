@@ -83,10 +83,11 @@ const menuGroups = [
         label: "Mobile App",
         route: "#",
         children: [
-          { label: "Customize Home Page", route: "/products" },
+          { label: "Customize Home Page", route: "/appcreator" },
           { label: "Manage Banners", route: "/manage_banners" },
           { label: "Manage Featured Categories", route: "/featuredcategories" },
           { label: "Manage Featured Products", route: "/carousel" },
+          { label: "Manage Walkthrough", route: "/walkthrough" },
         ],
       },
 

@@ -1,8 +1,10 @@
 // api/banners2xn/create.ts
 import { NextResponse } from 'next/server';
 import axios from 'axios';
+import { getAccessToken } from '@/utils/axiosInstance';
 
 export async function POST(request: Request) {
+  const accessToken = await getAccessToken(request);
   try {
     const { name, order, layout_type } = await request.json();
     const response = await axios.post('http://localhost/rest/V1/mobilemaster/banner2xn', {
@@ -12,6 +14,7 @@ export async function POST(request: Request) {
     }, {
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
     });
     return NextResponse.json(response.data[0], { status: 200 });

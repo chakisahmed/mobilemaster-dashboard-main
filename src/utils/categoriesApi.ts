@@ -68,3 +68,11 @@ export async function categoryById(categoryId:number) : Promise<any>{
     console.log('Error fetching data:', error.response?.data || error.message)
   }
 }
+export async function categoriesByName(name:string) : Promise<any>{
+  try {
+    const response = await axios.get(`/api/categories/list?name=${name}`);
+    return response.data; 
+  } catch (error) {
+    console.log('Error fetching data:', error.response?.data || error.message)
+  }
+}

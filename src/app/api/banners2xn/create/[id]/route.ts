@@ -1,13 +1,16 @@
 // api/banners2xn/create/[id].ts
 import { NextResponse } from 'next/server';
 import axios from 'axios';
+import { getAccessToken } from '@/utils/axiosInstance';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
+  const accessToken = await getAccessToken(request);
   const { id } = params;
   try {
     const response = await axios.get(`http://localhost/rest/V1/mobilemaster/banner2xn/${id}`, {
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
     });
     return NextResponse.json(response.data, { status: 200 });
@@ -17,11 +20,13 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+  const accessToken = await getAccessToken(request);
   const { id } = params;
   try {
     const response = await axios.delete(`http://localhost/rest/V1/mobilemaster/banner2xn/${id}`, {
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
     });
     return NextResponse.json({ message: 'Banner deleted successfully' }, { status: 200 });
@@ -31,6 +36,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
   }
 }
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
+  const accessToken = await getAccessToken(request);
   const { id } = params;
   const { name = null, sort_order = null } = await request.json();
   try {
@@ -40,6 +46,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );

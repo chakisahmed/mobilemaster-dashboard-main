@@ -18,11 +18,19 @@ export async function GET(req: Request) {
         const currentPage = url.searchParams.get('currentPage') || '1';
         const searchTerm = url.searchParams.get('searchTerm') || '';
 
-        // Fetch products data from Magento API with additional parameters
-        const response = await axios.get(`http://localhost/rest/V1/products?searchCriteria[currentPage]=${currentPage}&searchCriteria[filterGroups][0][filters][0][field]=name&searchCriteria[filterGroups][0][filters][0][value]=%${searchTerm}%&searchCriteria[filterGroups][0][filters][0][conditionType]=like`, {
-            headers: { Authorization: `Bearer ${accessToken}` },
-        });
-        //console.log(JSON.stringify(response.data));
+        // Fetch products data from Magento API with name and SKU search logic
+        const response = await axios.get(
+            `http://localhost/rest/V1/products?searchCriteria[currentPage]=${currentPage}` +
+            `&searchCriteria[filterGroups][0][filters][0][field]=name` +
+            `&searchCriteria[filterGroups][0][filters][0][value]=%${searchTerm}%` +
+            `&searchCriteria[filterGroups][0][filters][0][conditionType]=like` +
+            `&searchCriteria[filterGroups][0][filters][1][field]=sku` +
+            `&searchCriteria[filterGroups][0][filters][1][value]=%${searchTerm}%` +
+            `&searchCriteria[filterGroups][0][filters][1][conditionType]=like`,
+            {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            }
+        );
 
         return NextResponse.json(response.data);
     } catch (error: any) {

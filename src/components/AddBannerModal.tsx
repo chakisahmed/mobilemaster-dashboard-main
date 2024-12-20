@@ -3,6 +3,9 @@ import axios from 'axios';
 import { convertToBase64 } from '@/utils/file_utils';
 import SelectGroupOne from './FormElements/SelectGroup/SelectGroupOne';
 import CustomSelectGroup from './FormElements/SelectGroup/CustomSelectGroup';
+import { Product, products } from '@/utils/productsApi';
+import { categoriesByName, Category } from '@/utils/categoriesApi';
+import Select from 'react-select';
 
 interface AddBannerModalProps {
     isModalOpen: boolean;
@@ -28,6 +31,45 @@ export default function AddBannerModal({
         status: 0,
         order: 0,
     });
+    const [catalogProducts, setCatalogProducts] = useState<Product[]>();
+    const [catalogCategories, setCatalogCategories] = useState<Category[]>();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [catalogType, setCatalogType] = useState('');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+    const fetchProducts = async (query: string) => {
+
+        try {
+            if (catalogType === 'category') {
+                const res = await categoriesByName(query);
+                setCatalogCategories(res.items);
+            } else if (catalogType === 'product') {
+                const res = await products(query, 1);
+                setCatalogProducts(res.items);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        finally {
+        }
+    };
+    useEffect(() => {
+
+        console.log("debouncedSearchQuery", debouncedSearchTerm);
+        console.log("catalogType", catalogType);
+        fetchProducts(debouncedSearchTerm);
+
+    }, [debouncedSearchTerm,catalogType]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchTerm(searchTerm);
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }
+        , [searchTerm]);
 
     useEffect(() => {
         if (editMode && banner) {
@@ -46,58 +88,55 @@ export default function AddBannerModal({
     }, [editMode, banner]);
     const handleSelect = (value: string) => {
         setNewBanner({ ...newBanner, banner_type: value });
-      };
-    
+        setCatalogType(value);
+    };
+
     const handleAddBanner = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         try {
-          const formData = new FormData();
-          formData.append('name', newBanner.name);
-          formData.append('banner_type', newBanner.banner_type);
-          formData.append('layout_type', 'bannerimages');
-          formData.append('catalog_id', newBanner.catalog_id);
-          formData.append('order', '0'); // Order should be a string to append to FormData
-          formData.append('status', '1');
-          let response;
-          // Convert image to base64 if there is an image
-          if (newBanner.image) {
-            const base64String = await convertToBase64(newBanner.image);
-            console.log('Base64 image:', base64String.substring(0, 100));
-            formData.append('image', base64String);
-          }
-          console.log('newBanner:', newBanner.id);
-      
-          if (editMode) {
-            response = await axios.put(`/api/banners/create/${newBanner.id}`, formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-        } else {
-            response = await axios.post('/api/banners/create', formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-        }
+            const formData = new FormData();
+            formData.append('name', newBanner.name);
+            formData.append('banner_type', newBanner.banner_type);
+            formData.append('layout_type', 'bannerimages');
+            formData.append('catalog_id', newBanner.catalog_id);
+            formData.append('order', '0'); // Order should be a string to append to FormData
+            formData.append('status', '1');
+            let response;
+            // Convert image to base64 if there is an image
+            if (newBanner.image) {
+                const base64String = await convertToBase64(newBanner.image);
+                console.log('Base64 image:', base64String.substring(0, 100));
+                formData.append('image', base64String);
+            }
+            console.log('newBanner:', newBanner.id);
 
-        // //download image to local image folder in public /media/banners
-        // let responseImage = response.data.image; // URL or base64 data of the image
-    
-        // await axios.post('/api/downloadImage', { imageUrl: responseImage });
+            if (editMode) {
+                response = await axios.put(`/api/banners/create/${newBanner.id}`, formData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+            } else {
+                response = await axios.post('/api/banners/create', formData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+            }
 
 
-          onBannerAdded(response.data);
-      
-        //   Close the modal and reset the form
-          setIsModalOpen(false);
-          resetForm();
+
+            onBannerAdded(response.data);
+
+            //   Close the modal and reset the form
+            setIsModalOpen(false);
+            resetForm();
 
         } catch (error) {
-          console.error('Failed to create banner', error);
+            console.error('Failed to create banner', error);
         }
-      };
+    };
 
     const resetForm = () => {
         setNewBanner({
@@ -131,28 +170,24 @@ export default function AddBannerModal({
                         </div>
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700">Banner Type</label>
-                            <CustomSelectGroup options={["product","category"]} onSelect={handleSelect}/>
+                            <CustomSelectGroup options={["product", "category"]} onSelect={handleSelect} />
                         </div>
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700">Catalog ID</label>
-                            <input
-                                type="text"
-                                value={newBanner.catalog_id}
-                                onChange={(e) => setNewBanner({ ...newBanner, catalog_id: e.target.value })}
-                                className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                required
+                            <Select
+                                options={newBanner.banner_type === 'product' ? catalogProducts?.map((product) => ({ value: product.id, label: product.name })) : catalogCategories?.map((category) => ({ value: category.id, label: category.name }))}
+                                onChange={(selectedOption) => {
+                                    setNewBanner({ ...newBanner, catalog_id: selectedOption.value });
+                                }}
+                                placeholder="Select catalog ID"
+                                isSearchable
+                                isClearable
+                                onInputChange={(inputValue) => setSearchTerm(inputValue)}
+
+
                             />
                         </div>
-                        {/* <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">Status</label>
-                            <input
-                                type="text"
-                                value={newBanner.status}
-                                onChange={(e) => setNewBanner({ ...newBanner, status: e.target.value })}
-                                className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                required
-                            />
-                        </div> */}
+
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700">Image</label>
                             <input
@@ -166,8 +201,8 @@ export default function AddBannerModal({
                                 required
                             />
                             {editMode && newBanner.image && (
-        <img src={newBanner.image} alt="Current Banner" style={{ width: '100px', height: '100px' }} />
-    )}
+                                <img src={newBanner.image} alt="Current Banner" style={{ width: '100px', height: '100px' }} />
+                            )}
                         </div>
                         <div className="flex justify-end space-x-4">
                             <button

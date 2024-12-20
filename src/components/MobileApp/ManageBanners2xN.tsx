@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { convertToBase64 } from '@/utils/file_utils';
+import { convertToBase64 } from '../../utils/file_utils';
 
-const Manage2x1Banners = ({ bannerGroup }) => {
+const Manage2x2Banners = ({ bannerGroup }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [banners, setBanners] = useState([]);
   const [selectedBanners, setSelectedBanners] = useState([]);
@@ -29,7 +29,7 @@ const Manage2x1Banners = ({ bannerGroup }) => {
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        const response = await axios.get('/api/banners2xn/create/banner2x1');
+        const response = await axios.get('/api/banners2xn/create/banner2x2');
         const bannerContainers = response.data;
 
         const bannersWithItems = await Promise.all(
@@ -71,8 +71,8 @@ const Manage2x1Banners = ({ bannerGroup }) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-4xl p-8 space-y-6 bg-white rounded-lg shadow-md">
+    <div className="flex min-h-screen bg-gray-100">
+      <div className="w-full p-8 space-y-6 bg-white rounded-lg shadow-md">
         {/* Breadcrumbs */}
         <nav aria-label="breadcrumb">
           <ul className="flex space-x-2 text-gray-600">
@@ -94,14 +94,18 @@ const Manage2x1Banners = ({ bannerGroup }) => {
           </ul>
         </nav>
 
-        <h1 className="text-4xl font-bold text-center mb-8">Manage 2x1 Banners</h1>
+        <h1 className="text-4xl font-bold text-center mb-8">Manage 2x2 Banners</h1>
         <div className="flex justify-end mb-4">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 text-white bg-green-600 rounded-md shadow-sm hover:bg-green-700"
-          >
-            Create Banner
-          </button>
+        <button
+  onClick={() => {
+    setBannerToEdit(null); // Reset bannerToEdit when creating a new banner
+    setIsModalOpen(true);
+  }}
+  className="px-4 py-2 text-white bg-green-600 rounded-md shadow-sm hover:bg-green-700"
+>
+  Create Banner
+</button>
+
           {selectedBanners.length > 0 && (
             <button
               className="ml-2 px-4 py-2 text-white bg-red-600 rounded-md shadow-sm hover:bg-red-700"
@@ -135,14 +139,14 @@ const Manage2x1Banners = ({ bannerGroup }) => {
                   <td className="px-4 py-2">{banner.name}</td>
                   <td className="px-4 py-2">
                     <div className="flex space-x-2">
-                      {banner.items.map((item, index) => (
+                        {banner.items && banner.items.map((item, index) => (
                         <img
                           key={index}
                           src={item.image}
                           alt={item.name}
-                          className="w-12 h-12 object-cover"
+                          className="w-auto h-12 object-cover"
                         />
-                      ))}
+                        ))}
                     </div>
                   </td>
                   <td className="px-4 py-2">
@@ -176,9 +180,18 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
     banner_type: item.banner_type || 'category',
     catalog_id: item.catalog_id || '',
     name: item.name || ''
-  })) : [{ image: null, banner_type: 'category', catalog_id: '', name: '' }, { image: null, banner_type: 'category', catalog_id: '', name: '' }]);
+  })) : [
+    { image: null, banner_type: 'category', catalog_id: '', name: '' },
+    { image: null, banner_type: 'category', catalog_id: '', name: '' },
+    { image: null, banner_type: 'category', catalog_id: '', name: '' },
+    { image: null, banner_type: 'category', catalog_id: '', name: '' }
+  ]);
 
   const handleImageChange = (index, file) => {
+    convertToBase64(file).then((base64String) => {
+      console.log('file before:', file);
+      console.log('Base64 image:', base64String);
+    });
     const newImages = [...images];
     newImages[index].image = file;
     setImages(newImages);
@@ -207,9 +220,9 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
     try {
       let response;
       if (bannerToEdit) {
-        response = await axios.put(`/api/banners2xn/create/${bannerToEdit.id}`, { name: name, layout_type: 'banner2x1' });
+        response = await axios.put(`/api/banners2xn/create/${bannerToEdit.id}`, { name: name, layout_type: 'banner2x2' });
       } else {
-        response = await axios.post('/api/banners2xn/create', { name: name, order: -1, layout_type: 'banner2x1' });
+        response = await axios.post('/api/banners2xn/create', { name: name, order: -1, layout_type: 'banner2x2' });
       }
       const bannerGroup = response.data;
       let i = 1;
@@ -221,28 +234,32 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
           formData.append('catalog_id', image.catalog_id);
           formData.append('order', i);
           formData.append('status', '1');
-          formData.append('layout_type', 'banner2x1-' + bannerGroup.id);
+          formData.append('layout_type', 'banner2x2-' + bannerGroup.id);
   
           const base64String = await convertToBase64(image.image);
           console.log('Base64 image:', base64String.substring(0, 100));
           formData.append('image', base64String);
           console.log(JSON.stringify(Object.fromEntries(formData.entries()), null, 2));
+          let response;
   
           if (bannerToEdit) {
             // Update existing image
-            await axios.put(`/api/banners/${bannerToEdit.items[i - 1].id}`, formData, {
+            response = await axios.put(`/api/banners/${bannerToEdit.items[i - 1].id}`, formData, {
               headers: {
                 'Content-Type': 'application/json',
               },
             });
           } else {
             // Create new image
-            await axios.post('/api/banners/create', formData, {
+            response = await axios.post('/api/banners/create', formData, {
               headers: {
                 'Content-Type': 'application/json',
               },
             });
           }
+          let responseimage = response.data.image; // ex: /media/banners/category/1.jpg 
+          //download image to local image folder in public /media/banners/
+          
   
           i++;
         }
@@ -280,19 +297,19 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
                 src={typeof image.image === 'string' ? image.image : URL.createObjectURL(image.image)}
                 alt="Preview"
                 className="mb-2"
-                style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                style={{ width: 'auto', height: '100px', objectFit: 'cover' }}
                 />
               )}
               <input
                 type="file"
                 onChange={(e) => handleImageChange(index, e.target.files[0])}
                 required
-                className="border p-2 w-full"
+                className="border p-1 w-full"
               />
               <select
                 value={image.banner_type}
                 onChange={(e) => handleBannerTypeChange(index, e.target.value)}
-                className="border p-2 mt-2 w-full"
+                className="border p-1 mt-1 w-full"
               >
                 <option value="product">Product</option>
                 <option value="category">Category</option>
@@ -302,14 +319,14 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
                 value={image.catalog_id}
                 onChange={(e) => handleCatalogIdChange(index, e.target.value)}
                 placeholder="Catalog ID"
-                className="border p-2 mt-2 w-full"
+                className="border p-1 mt-1 w-full"
               />
               <input
                 type="text"
                 value={image.name}
                 onChange={(e) => handleNameChange(index, e.target.value)}
                 placeholder="Name"
-                className="border p-2 mt-2 w-full"
+                className="border p-1 mt-1 w-full"
               />
               </div>
             ))}
@@ -335,4 +352,4 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
   );
 };
 
-export default Manage2x1Banners;
+export default Manage2x2Banners;
