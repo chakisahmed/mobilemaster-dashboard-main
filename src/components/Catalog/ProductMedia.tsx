@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface ProductMediaProps {
     images: string[];
@@ -11,8 +12,8 @@ const ProductMedia: React.FC<ProductMediaProps> = ({images}) => {
             <p>Photo Product</p>
             <div className="flex gap-2.5 p-2.5 border-2 border-dashed border-gray-300 rounded-lg justify-center items-center mb-3.5 bg-gray-100">
                 {images.map((image, index) => (
-                    <div className="w-24 h-24 rounded-lg overflow-hidden bg-gray-200 flex justify-center items-center">
-                    <img
+                    <div key={index} className="w-24 h-24 rounded-lg overflow-hidden bg-gray-200 flex justify-center items-center">
+                    <Image
                         src={"https://ext.web.wamia.tn/media/catalog/product"+image} // Example image source
                         alt="Product Image 1"
                         className="w-full h-full object-cover"

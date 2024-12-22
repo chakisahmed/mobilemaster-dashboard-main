@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-interface props{
+interface props {
   options: string[];
   onSelect: (value: string) => void;
 }
-const CustomSelectGroup: React.FC<props> = ({options,onSelect}) => {
+const CustomSelectGroup: React.FC<props> = ({ options, onSelect }) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
@@ -17,21 +17,20 @@ const CustomSelectGroup: React.FC<props> = ({options,onSelect}) => {
       <div className="relative z-20 bg-transparent dark:bg-dark-2">
         <select
           value={selectedOption}
-          
+
           onChange={(e) => {
             setSelectedOption(e.target.value);
             changeTextColor();
             onSelect(e.target.value);
           }}
-          className={`relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary ${
-            isOptionSelected ? "text-dark dark:text-white" : ""
-          }`}
+          className={`relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary ${isOptionSelected ? "text-dark dark:text-white" : ""
+            }`}
         >
           <option value="" disabled className="text-dark-6">
             Select your subject
           </option>
-          {options.map((option) => (
-            <option value={option} className="text-dark-6">
+          {options.map((option, index) => (
+            <option key={index} value={option} className="text-dark-6">
               {option}
             </option>
           ))}

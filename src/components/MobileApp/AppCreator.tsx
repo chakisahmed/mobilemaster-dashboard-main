@@ -3,7 +3,6 @@ import React, { use, useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { render } from 'react-dom';
 import { renderLayoutAppearance } from './renderLayoutAppearance';
 const ITEM_TYPE = 'ITEM';
 const AppCreator = () => {
@@ -416,5 +415,7 @@ const DraggableListItem = React.memo(({ id, index, label, moveItem, removeFromMi
         </li>
     );
 });
+
+DraggableListItem.displayName = "DraggableListItem";
 
 export default AppCreator;
