@@ -10,7 +10,7 @@ module.exports = {
   images: {
       remotePatterns: [
           {
-              protocol: 'http',
+              protocol: 'https',
               hostname: 'ext.web.wamia.tn',
               port: '', 
               pathname: '/media/catalog/product/**', // Match the specific path
