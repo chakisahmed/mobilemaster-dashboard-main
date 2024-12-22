@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const { username, password } = body;
 
     // Call external API to authenticate
-    const response = await axios.post('http://localhost/rest/V1/integration/admin/token', {
+    const response = await axios.post('https://ext.web.wamia.tn/rest/V1/integration/admin/token', {
       username,
       password,
     });

@@ -20,7 +20,7 @@ export async function GET(req: Request) {
 
         // Fetch products data from Magento API with name and SKU search logic
         const response = await axios.get(
-            `http://localhost/rest/V1/products?searchCriteria[currentPage]=${currentPage}` +
+            `https://ext.web.wamia.tn/rest/V1/products?searchCriteria[currentPage]=${currentPage}` +
             `&searchCriteria[filterGroups][0][filters][0][field]=name` +
             `&searchCriteria[filterGroups][0][filters][0][value]=%${searchTerm}%` +
             `&searchCriteria[filterGroups][0][filters][0][conditionType]=like` +

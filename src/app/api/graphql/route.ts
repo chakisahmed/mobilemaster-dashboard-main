@@ -2,22 +2,28 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 
 // GET request handler
-export async function GET(req: Request) {
+export async function POST(req: Request) {
     try {
+        // Extract search term and page from query parameters
+        const payload = await req.text();
+
+
+        // Construct the API URL
+        const apiUrl = `https://ext.web.wamia.tn/graphql`;
+
         // Send GET request to external API using axios
-        const response = await axios.get('https://ext.web.wamia.tn/rest/V1/customermobile/walkthrough', {
+        const response = await axios.post(apiUrl, payload, {
             headers: {
                 'Content-Type': 'application/json',
-
             },
         });
 
         // Return a success response with the data from the external API
         return NextResponse.json(response.data, { status: 200 });
     } catch (error) {
-        console.error('Error fetching walkthrough data:', error);
+        console.error('Error fetching products:', error);
         return NextResponse.json({
-            error: 'Failed to fetch walkthrough data',
+            error: 'Failed to fetch products',
             details: error.message
         }, { status: 500 });
     }

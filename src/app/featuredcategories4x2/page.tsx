@@ -193,7 +193,7 @@ const FeaturedCategories4xNPage: React.FC = () => {
                     <div key={index} className="border p-4 flex flex-col items-center">
                         <label htmlFor={`file-input-${index}`} className="relative mb-2 cursor-pointer">
                             <img 
-                                src={images[index] || "http://localhost:3000/media/placeholder-square.jpg"} 
+                                src={images[index] || "https://ext.web.wamia.tn:3000/media/placeholder-square.jpg"} 
                                 alt="Input Image" 
                                 className="mb-2 w-24 h-24" 
                             />

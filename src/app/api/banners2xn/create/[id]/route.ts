@@ -7,7 +7,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
   const accessToken = await getAccessToken(request);
   const { id } = params;
   try {
-    const response = await axios.get(`http://localhost/rest/V1/mobilemaster/banner2xn/${id}`, {
+    const response = await axios.get(`https://ext.web.wamia.tn/rest/V1/mobilemaster/banner2xn/${id}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
@@ -23,7 +23,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
   const accessToken = await getAccessToken(request);
   const { id } = params;
   try {
-    const response = await axios.delete(`http://localhost/rest/V1/mobilemaster/banner2xn/${id}`, {
+    const response = await axios.delete(`https://ext.web.wamia.tn/rest/V1/mobilemaster/banner2xn/${id}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
@@ -41,7 +41,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   const { name = null, sort_order = null } = await request.json();
   try {
     const response = await axios.put(
-      `http://localhost/rest/V1/mobilemaster/banner2xn/${id}`,
+      `https://ext.web.wamia.tn/rest/V1/mobilemaster/banner2xn/${id}`,
       { name, sort_order },
       {
         headers: {

@@ -13,7 +13,7 @@ export async function GET(req: Request) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const url = new URL('http://localhost/rest/V1/categories/list');
+        const url = new URL('https://ext.web.wamia.tn/rest/V1/categories/list');
         const params = new URLSearchParams();
 
         const searchParams = req.url.split('?')[1];

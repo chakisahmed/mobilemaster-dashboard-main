@@ -7,7 +7,7 @@ export async function GET(req: Request) {
     try {
 
         // Send GET request to external API using axios
-        const response = await axios.get('http://localhost/rest/V1/customermobile/homepage', {
+        const response = await axios.get('https://ext.web.wamia.tn/rest/V1/customermobile/homepage', {
             headers: {
                 'Content-Type': 'application/json'
             },

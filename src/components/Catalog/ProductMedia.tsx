@@ -13,7 +13,7 @@ const ProductMedia: React.FC<ProductMediaProps> = ({images}) => {
                 {images.map((image, index) => (
                     <div className="w-24 h-24 rounded-lg overflow-hidden bg-gray-200 flex justify-center items-center">
                     <img
-                        src={"http://localhost/media/catalog/product"+image} // Example image source
+                        src={"https://ext.web.wamia.tn/media/catalog/product"+image} // Example image source
                         alt="Product Image 1"
                         className="w-full h-full object-cover"
                     />

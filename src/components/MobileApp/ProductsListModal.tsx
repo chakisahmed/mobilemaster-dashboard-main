@@ -27,18 +27,25 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
     const [selectedProducts, setSelectedProducts] = useState<{ id: string; name: string }[]>([]);
     const [selectedStartDate, setSelectedStartDate] = useState<string>('');
     const [selectedEndDate, setSelectedEndDate] = useState<string>('');
+    const maxProductsNumber = {
+        'layout1':20,
+        'layout2':5,
+        'layout3':3,
+    }
 
     const toggleRowSelection = (id: string, name: string) => {
         setSelectedRows((prevSelectedRows) =>
             prevSelectedRows.includes(id)
-                ? prevSelectedRows.filter((rowId) => rowId !== id)
-                : [...prevSelectedRows, id]
+            ? prevSelectedRows.filter((rowId) => rowId !== id)
+            : [...prevSelectedRows, id]
         );
+        console.log('Selected rows:', selectedRows);
         setSelectedProducts((prevSelectedProducts) =>
             prevSelectedProducts.some((product) => product.id === id)
                 ? prevSelectedProducts.filter((product) => product.id !== id)
                 : [...prevSelectedProducts, { id, name }]
         );
+        console.log('Selected products:', selectedProducts);
     };
 
     useEffect(() => {
@@ -95,7 +102,50 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-4 rounded shadow-lg w-3/4">
-                {step === 1 && (
+            {step === 1 && (
+                    <>
+                        <h2 className="text-xl font-bold mb-4">Choose Layout Appearance</h2>
+                        <div className="flex justify-around mb-4">
+                            <div
+                                className={`cursor-pointer p-4 border ${selectedLayout === 'layout1' ? 'border-blue-500' : 'border-gray-300'}`}
+                                onClick={() => setSelectedLayout('layout1')}
+                            >
+                                <p>Layout 1</p>
+                                {renderLayoutAppearance('layout1', false)}
+                            </div>
+                            <div
+                                className={`cursor-pointer p-4 border ${selectedLayout === 'layout2' ? 'border-blue-500' : 'border-gray-300'}`}
+                                onClick={() => setSelectedLayout('layout2')}
+                            >
+                                <p>Layout 2</p>
+                                {renderLayoutAppearance('layout2', false)}
+                            </div>
+                            <div
+                                className={`cursor-pointer p-4 border ${selectedLayout === 'layout3' ? 'border-blue-500' : 'border-gray-300'}`}
+                                onClick={() => setSelectedLayout('layout3')}
+                            >
+                                <p>Layout 3</p>
+                                {renderLayoutAppearance('layout3', false)}
+                            </div>
+                        </div>
+                        <div className="flex justify-end space-x-2 mt-4">
+                            <button
+                                className="bg-gray-500 text-white px-2 py-1 rounded"
+                                onClick={onClose}
+                            >
+                                Close
+                            </button>
+                            <button
+                                className="bg-blue-500 text-white px-2 py-1 rounded"
+                                onClick={handleNextStep}
+                                disabled={!selectedLayout}
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </>
+                )}
+                {step === 2 && (
                     <>
                         <h2 className="text-xl font-bold mb-4">Products List</h2>
                         <input
@@ -138,14 +188,18 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
                                         <tr
                                             key={product.id}
                                             className={`cursor-pointer ${selectedRows.includes(product.id + '') ? 'bg-blue-100' : ''}`}
-                                            onClick={() => toggleRowSelection(product.id + '', product.name)}
+                                            onClick={() => {
+                                                if(selectedProducts.length < maxProductsNumber[selectedLayout]){
+                                                toggleRowSelection(product.id + '', product.name)
+                                                }
+                                            }}
                                         >
                                             <td className="py-2 px-4 border-b text-left">{product.id}</td>
                                             <td className="py-2 px-4 border-b text-left">{product.sku}</td>
                                             <td className="py-2 px-4 border-b text-left">{product.name}</td>
                                             <td className="py-2 px-4 border-b text-left">
                                                 <img
-                                                    src={"http://localhost/media/catalog/product" + product.media_gallery_entries[0]?.file}
+                                                    src={"https://ext.web.wamia.tn/media/catalog/product" + product.media_gallery_entries[0]?.file}
                                                     alt={product.name}
                                                     className="w-12 h-12 object-cover"
                                                 />
@@ -156,49 +210,7 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
                             </table>
                         </div>
                         <div className="flex justify-end space-x-2 mt-4">
-                            <button
-                                className="bg-gray-500 text-white px-2 py-1 rounded"
-                                onClick={onClose}
-                            >
-                                Close
-                            </button>
-                            <button
-                                className="bg-blue-500 text-white px-2 py-1 rounded"
-                                onClick={handleNextStep}
-                            >
-                                Next
-                            </button>
-                        </div>
-                    </>
-                )}
-                {step === 2 && (
-                    <>
-                        <h2 className="text-xl font-bold mb-4">Choose Layout Appearance</h2>
-                        <div className="flex justify-around mb-4">
-                            <div
-                                className={`cursor-pointer p-4 border ${selectedLayout === 'layout1' ? 'border-blue-500' : 'border-gray-300'}`}
-                                onClick={() => setSelectedLayout('layout1')}
-                            >
-                                <p>Layout 1</p>
-                                {renderLayoutAppearance('layout1', false)}
-                            </div>
-                            <div
-                                className={`cursor-pointer p-4 border ${selectedLayout === 'layout2' ? 'border-blue-500' : 'border-gray-300'}`}
-                                onClick={() => setSelectedLayout('layout2')}
-                            >
-                                <p>Layout 2</p>
-                                {renderLayoutAppearance('layout2', false)}
-                            </div>
-                            <div
-                                className={`cursor-pointer p-4 border ${selectedLayout === 'layout3' ? 'border-blue-500' : 'border-gray-300'}`}
-                                onClick={() => setSelectedLayout('layout3')}
-                            >
-                                <p>Layout 3</p>
-                                {renderLayoutAppearance('layout3', false)}
-                            </div>
-                        </div>
-                        <div className="flex justify-end space-x-2 mt-4">
-                            <button
+                        <button
                                 className="bg-gray-500 text-white px-2 py-1 rounded"
                                 onClick={handlePreviousStep}
                             >
@@ -213,6 +225,7 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
                         </div>
                     </>
                 )}
+                
                 {step === 3 && (  
                     <>
                         <h2 className="text-xl font-bold mb-4">Optional: Choose time</h2>

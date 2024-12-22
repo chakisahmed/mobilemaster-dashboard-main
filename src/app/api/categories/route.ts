@@ -16,7 +16,7 @@ export async function GET(req: Request) {
    
 
     // Fetch protected data from external API
-    const response = await axios.get('http://localhost/rest/V1/categories?rootCategoryId=2', {
+    const response = await axios.get('https://ext.web.wamia.tn/rest/V1/categories?rootCategoryId=2', {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 

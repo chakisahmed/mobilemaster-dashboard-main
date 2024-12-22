@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { getAccessToken } from '@/utils/axiosInstance';
 
-//http://localhost/rest/V1/mobilemaster/sortorder/swap {"id1":1,"id2":2,"pos1":1, "pos2":2}
+//https://ext.web.wamia.tn/rest/V1/mobilemaster/sortorder/swap {"id1":1,"id2":2,"pos1":1, "pos2":2}
 export async function PUT(req: Request) {
     try {
         // Parse the request body
@@ -10,7 +10,7 @@ export async function PUT(req: Request) {
         const body = await req.json();
 
         // Send PUT request to external API using axios
-        const response = await axios.put('http://localhost/rest/V1/mobilemaster/sortorder/swap', body, {
+        const response = await axios.put('https://ext.web.wamia.tn/rest/V1/mobilemaster/sortorder/swap', body, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,

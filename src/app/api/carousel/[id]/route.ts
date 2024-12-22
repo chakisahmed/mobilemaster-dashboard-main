@@ -9,7 +9,7 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
         const { id } = params;
 
         // Send DELETE request to external API using axios
-        const response = await axios.delete(`http://localhost/rest/V1/mobilemaster/productcarousel/${id}`, {
+        const response = await axios.delete(`https://ext.web.wamia.tn/rest/V1/mobilemaster/productcarousel/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,

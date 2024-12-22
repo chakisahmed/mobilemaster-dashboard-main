@@ -11,7 +11,7 @@ export async function GET(req: Request) {
         const layoutType = url.pathname.split('/').pop();
 
         // Send GET request to external API using axios
-        const response = await axios.get(`http://localhost/rest/V1/mobilemaster/featuredcategories/${layoutType}`, {
+        const response = await axios.get(`https://ext.web.wamia.tn/rest/V1/mobilemaster/featuredcategories/${layoutType}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
@@ -33,7 +33,7 @@ export async function DELETE(req: Request) {
         const accessToken = getAccessToken(req);
         const url = new URL(req.url);
         const layoutType = url.pathname.split('/').pop();
-        const response = await axios.delete(`http://localhost/rest/V1/mobilemaster/featuredcategories/${layoutType}`, {
+        const response = await axios.delete(`https://ext.web.wamia.tn/rest/V1/mobilemaster/featuredcategories/${layoutType}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,

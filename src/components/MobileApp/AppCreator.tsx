@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useState } from 'react';
+import React, { use, useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -17,8 +17,10 @@ const AppCreator = () => {
 
 
 
+
     const [middleList, setMiddleList] = useState([]);
-    const moveItem = async (dragIndex: number, hoverIndex: number) => {
+    const [appPreview, setAppPreview] = useState([]);
+    const moveItem = useCallback(async (dragIndex: number, hoverIndex: number) => {
         const updatedList = [...middleList];
         const [draggedItem] = updatedList.splice(dragIndex, 1);
         updatedList.splice(hoverIndex, 0, draggedItem);
@@ -40,7 +42,7 @@ const AppCreator = () => {
         } catch (error) {
             console.error('Error swapping sort order positions:', error);
         }
-    };
+    },[middleList]);
     useEffect(() => {
         const fetchHomepageData = async () => {
             try {
@@ -54,29 +56,30 @@ const AppCreator = () => {
         fetchHomepageData();
 
     }, []);
+    const fetchData = async () => {
+        try {
+            //const banner2x1Response = await axios.get('/api/banners2xn/create/banner2x1');
+            const banner2x2Response = await axios.get('/api/banners2xn/create/banner2x2');
+            const featuredCategories4x1Response = await axios.get('/api/featuredcategories4xn/featuredcategories4x1');
+            const featuredCategories4x2Response = await axios.get('/api/featuredcategories4xn/featuredcategories4x2');
+            const carouselResponse = await axios.get('/api/carousel');
+            //setBanner2x1(banner2x1Response.data);
+            setBanner2x2(banner2x2Response.data);
+            setFeaturedCategories4x1(featuredCategories4x1Response.data);
+            setFeaturedCategories4x2(featuredCategories4x2Response.data);
+            setCarousel(carouselResponse.data);
+
+            // Fetch sort order data for the middle list container
+            const sortOrderResponse = await axios.get('/api/sort_order');
+            setMiddleList(sortOrderResponse.data);
+            setAppPreview(sortOrderResponse.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
     useEffect(() => {
         document.title = "Homepage Configurator";
 
-        const fetchData = async () => {
-            try {
-                //const banner2x1Response = await axios.get('/api/banners2xn/create/banner2x1');
-                const banner2x2Response = await axios.get('/api/banners2xn/create/banner2x2');
-                const featuredCategories4x1Response = await axios.get('/api/featuredcategories4xn/featuredcategories4x1');
-                const featuredCategories4x2Response = await axios.get('/api/featuredcategories4xn/featuredcategories4x2');
-                const carouselResponse = await axios.get('/api/carousel');
-                //setBanner2x1(banner2x1Response.data);
-                setBanner2x2(banner2x2Response.data);
-                setFeaturedCategories4x1(featuredCategories4x1Response.data);
-                setFeaturedCategories4x2(featuredCategories4x2Response.data);
-                setCarousel(carouselResponse.data);
-
-                // Fetch sort order data for the middle list container
-                const sortOrderResponse = await axios.get('/api/sort_order');
-                setMiddleList(sortOrderResponse.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
 
         fetchData();
     }, []);
@@ -92,7 +95,10 @@ const AppCreator = () => {
             };
             console.log('Payload:', payload);
             const response = await axios.post('/api/sort_order', payload);
-            setMiddleList([...middleList, { label: item.label ?? item.name, type: item.type, layout_appearance: item.layoutAppearance ?? null }]);
+            
+            console.log("add to middlelist",{ label: item.label ?? item.name, type: item.type, layout_appearance: item.layoutAppearance ?? null })
+            setMiddleList([]);
+            fetchData();
         } catch (error) {
             console.error('Error posting sort order data:', error);
         }
@@ -110,12 +116,11 @@ const AppCreator = () => {
         };
         deleteItem(middleList[index].id);
         setMiddleList(middleList.filter((_, i) => i !== index));
-    };
+    };  
 
-    function renderMiddleList(): React.ReactNode {
-        console.log('Middle List:', middleList);
+    function renderAppPreview(): React.ReactNode {
         return (
-            middleList.map((item, index) => {
+            appPreview.map((item, index) => {
 
                 if (item.type === 'banner') {
                     if (item.layout_id == "bannerimages")
@@ -270,7 +275,7 @@ const AppCreator = () => {
                 <h2 className="text-xl font-bold mb-4">Banner 2x2 Items</h2>
                 <ul>
                     {banner2x2.map((item, index) => (
-                        <li key={index} className="mb-2 p-2 bg-gray-200 rounded-lg cursor-pointer" onClick={() => addToMiddleList({ ...item, type: 'bannerseconary' })}>
+                        <li key={index} className="mb-2 p-2 bg-gray-200 rounded-lg cursor-pointer" onClick={() => addToMiddleList({ ...item, type: 'banner' })}>
                             {item.name}
                         </li>
                     ))}
@@ -333,7 +338,7 @@ const AppCreator = () => {
                 </div>
                 {/* Screen Container */}
                 <div className="w-11/12 h-full bg-white rounded-2xl overflow-y-scroll p-4">
-                    {renderMiddleList()}
+                    {renderAppPreview()}
                     {/* Scrollable Content */}
                     {/* <div className="flex flex-col mt-4">
                         <div className="mb-5">
@@ -362,7 +367,7 @@ const AppCreator = () => {
         </div>
     );
 };
-const DraggableListItem = ({ id, index, label, moveItem, removeFromMiddleList }) => {
+const DraggableListItem = React.memo(({ id, index, label, moveItem, removeFromMiddleList }) => {
     const ref = React.useRef(null);
 
     const [, drop] = useDrop({
@@ -410,6 +415,6 @@ const DraggableListItem = ({ id, index, label, moveItem, removeFromMiddleList })
             </button>
         </li>
     );
-};
+});
 
 export default AppCreator;
