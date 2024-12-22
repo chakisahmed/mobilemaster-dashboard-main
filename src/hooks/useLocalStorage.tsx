@@ -18,7 +18,7 @@ function useLocalStorage<T>(
         // Parse stored json or if none return initialValue
         return item ? JSON.parse(item) : initialValue;
       }
-    } catch (error) {
+    } catch (error:any) {
       // If error also return initialValue
       console.log(error);
       return initialValue;
@@ -38,7 +38,7 @@ function useLocalStorage<T>(
         // browser code
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
       }
-    } catch (error) {
+    } catch (error:any) {
       // A more advanced implementation would handle the error case
       console.log(error);
     }

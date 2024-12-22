@@ -18,7 +18,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     // Assuming the external API returns a success status code
     // Return true to indicate success
     return NextResponse.json(true, { status: 200 });
-  } catch (error) {
+  } catch (error:any) {
     console.error(`Error deleting banner with ID ${id}:`, error);
 
     // Return false to indicate failure
@@ -37,7 +37,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         },
       });
       return NextResponse.json(response.data[0], { status: 200 });
-    } catch (error) {
+    } catch (error:any) {
       console.error(`Error updating banner with ID ${id}:`, error);
       return NextResponse.json({ error: 'Failed to update banner' }, { status: 500 });
     }

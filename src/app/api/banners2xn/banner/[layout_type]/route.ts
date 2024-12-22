@@ -15,7 +15,7 @@ export async function GET(request: Request, { params }: { params: { layout_type:
             },
         });
         return NextResponse.json(response.data, { status: 200 });
-    } catch (error) {
+    } catch (error:any) {
         console.error(`Error fetching banners for layout type ${layout_type}:`, error);
         return NextResponse.json({ error: 'Failed to fetch banners' }, { status: 500 });
     }

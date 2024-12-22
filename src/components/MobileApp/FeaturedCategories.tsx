@@ -32,7 +32,7 @@ const FeaturedCategoriesPage: React.FC = () => {
 
 
                 setCatalogCategories(flatCategories);
-            } catch (error) {
+            } catch (error:any) {
                 console.error('Error fetching catalog categories:', error);
 
             }
@@ -45,7 +45,7 @@ const FeaturedCategoriesPage: React.FC = () => {
             try {
                 const response = await axios.get('/api/featuredcategories');
                 setCategories(response.data);
-            } catch (error) {
+            } catch (error:any) {
                 console.error('Error fetching categories:', error);
             }
         };
@@ -73,7 +73,7 @@ const FeaturedCategoriesPage: React.FC = () => {
             }
             setSelectedCategory(null);
             setIsModalOpen(false);
-        } catch (error) {
+        } catch (error:any) {
             console.error('Error uploading category:', error);
         }
     }
@@ -103,7 +103,7 @@ const FeaturedCategoriesPage: React.FC = () => {
                                         });
                                         setCategories(categories.filter((category) => !checkedCategories.has(category.id)));
                                         setCheckedCategories(new Set());
-                                    } catch (error) {
+                                    } catch (error:any) {
                                         console.error('Error deleting categories:', error);
                                     }
                                 }

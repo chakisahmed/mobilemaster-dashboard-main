@@ -15,7 +15,7 @@ const Manage2x2BannersPage = () => {
       <Breadcrumb pageName="Manage Secondary Banners" />
 
       <div className="flex flex-col gap-10">
-        <Manage2x2Banners />
+        <Manage2x2Banners bannerGroup={''}/>
       </div>
     </DefaultLayout>
   );

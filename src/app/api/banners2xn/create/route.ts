@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       },
     });
     return NextResponse.json(response.data[0], { status: 200 });
-  } catch (error) {
+  } catch (error:any) {
     console.error('Error creating banner2xn:', error);
     return NextResponse.json({ error: 'Failed to create banner2xn' }, { status: 500 });
   }

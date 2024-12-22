@@ -12,12 +12,26 @@ const AppCreator = () => {
     const [featuredCategories4x2, setFeaturedCategories4x2] = useState([]);
     const [homepagedata, setHomepagedata] = useState([]);
     //carousel
-    const [carousel, setCarousel] = useState([]);
+    interface CarouselItem {
+        id: string;
+        label: string;
+        layout_appearance: string;
+    }
+
+    const [carousel, setCarousel] = useState<CarouselItem[]>([]);
 
 
 
 
-    const [middleList, setMiddleList] = useState([]);
+    interface MiddleListItem {
+        id: string;
+        layout_id?: string;
+        label: string;
+        type: string;
+        layoutAppearance?: string;
+    }
+
+    const [middleList, setMiddleList] = useState<MiddleListItem[]>([]);
     const [appPreview, setAppPreview] = useState([]);
     const moveItem = useCallback(async (dragIndex: number, hoverIndex: number) => {
         const updatedList = [...middleList];
@@ -38,7 +52,7 @@ const AppCreator = () => {
                 },
             });
 
-        } catch (error) {
+        } catch (error:any) {
             console.error('Error swapping sort order positions:', error);
         }
     },[middleList]);
@@ -48,7 +62,7 @@ const AppCreator = () => {
                 const response = await axios.get('/api/homepagedata');
                 setHomepagedata(response.data);
 
-            } catch (error) {
+            } catch (error:any) {
                 console.error('Error fetching homepage data:', error);
             }
         }
@@ -72,7 +86,7 @@ const AppCreator = () => {
             const sortOrderResponse = await axios.get('/api/sort_order');
             setMiddleList(sortOrderResponse.data);
             setAppPreview(sortOrderResponse.data);
-        } catch (error) {
+        } catch (error:any) {
             console.error('Error fetching data:', error);
         }
     };
@@ -83,7 +97,7 @@ const AppCreator = () => {
         fetchData();
     }, []);
 
-    const addToMiddleList = async (item) => {
+    const addToMiddleList = async (item: { layout_id: any; label: any; position?: number; type: any; layout_type?: any; id?: any; name?: any; layoutAppearance?: any; }) => {
         try {
             const payload = {
                 layout_id: item.layout_id ?? item.layout_type + '-' + item.id,
@@ -98,18 +112,18 @@ const AppCreator = () => {
             console.log("add to middlelist",{ label: item.label ?? item.name, type: item.type, layout_appearance: item.layoutAppearance ?? null })
             setMiddleList([]);
             fetchData();
-        } catch (error) {
+        } catch (error:any) {
             console.error('Error posting sort order data:', error);
         }
     };
 
-    const removeFromMiddleList = (index) => {
+    const removeFromMiddleList = (index: number) => {
         // call /api/sort_order/[id] DELETE request
-        const deleteItem = async (id) => {
+        const deleteItem = async (id: string) => {
             try {
                 const response = await axios.delete(`/api/sort_order/${id}`);
                 console.log('Response:', response.data);
-            } catch (error) {
+            } catch (error:any) {
                 console.error('Error deleting sort order item:', error);
             }
         };
@@ -118,8 +132,9 @@ const AppCreator = () => {
     };  
 
     function renderAppPreview(): React.ReactNode {
+      
         return (
-            appPreview.map((item, index) => {
+            appPreview.map((item:any, index) => {
 
                 if (item.type === 'banner') {
                     if (item.layout_id == "bannerimages")
@@ -214,10 +229,10 @@ const AppCreator = () => {
                     console.log('item id', item.layout_id);
                     console.log('Carousel:', carousel);
                     const layout_id = item.layout_id?.split('-')[1];
-                    const layout_appearance = carousel.find((carouselItem) => carouselItem.id === layout_id)?.layout_appearance;
+                    const layout_appearance = carousel.find((carouselItem:any) => carouselItem.id === layout_id)?.layout_appearance;
                     console.log('Layout Appearance:', layout_appearance);
                     return (
-                        renderLayoutAppearance(layout_appearance, false)
+                        renderLayoutAppearance(layout_appearance || '', false)
                         // <div key={index} className="mb-5">
                         //     <h2 className="text-xl font-bold mb-2">{item.label}</h2>
                         //     <div className="flex justify-between ">
@@ -273,32 +288,17 @@ const AppCreator = () => {
 
                 <h2 className="text-xl font-bold mb-4">Banner 2x2 Items</h2>
                 <ul>
-                    {banner2x2.map((item, index) => (
+                    {banner2x2.map((item:any, index) => (
                         <li key={index} className="mb-2 p-2 bg-gray-200 rounded-lg cursor-pointer" onClick={() => addToMiddleList({ ...item, type: 'banner' })}>
                             {item.name}
                         </li>
                     ))}
                 </ul>
-                <h2 className="text-xl font-bold mb-4">Featured Categories 4x1 Items</h2>
-                <ul>
-                    {featuredCategories4x1.map((item, index) => (
-                        <li key={index} className="mb-2 p-2 bg-gray-200 rounded-lg cursor-pointer" onClick={() => addToMiddleList({ ...item, type: 'category' })}>
-                            {item.name}
-                        </li>
-                    ))}
-                </ul>
-                <h2 className="text-xl font-bold mb-4">Featured Categories 4x2 Items</h2>
-                <ul>
-                    {featuredCategories4x2.map((item, index) => (
-                        <li key={index} className="mb-2 p-2 bg-gray-200 rounded-lg cursor-pointer" onClick={() => addToMiddleList({ ...item, type: 'category' })}>
-                            {item.name}
-                        </li>
-                    ))}
-                </ul>
+                
                 <h2 className="text-xl font-bold mb-4">Carousel</h2>
                 <ul>
-                    {carousel.map((item, index) => (
-                        <li key={index} className="mb-2 p-2 bg-gray-200 rounded-lg cursor-pointer" onClick={() => addToMiddleList({ layout_id: 'product-' + item.id, label: item.label, position: middleList.length + 1, type: "product" }, 'product')}>
+                    {carousel.map((item:any, index) => (
+                        <li key={index} className="mb-2 p-2 bg-gray-200 rounded-lg cursor-pointer" onClick={() => addToMiddleList({ layout_id: 'product-' + item.id, label: item.label, position: middleList.length + 1, type: "product" })}>
                             {item.label}
                         </li>
                     ))}
@@ -366,7 +366,15 @@ const AppCreator = () => {
         </div>
     );
 };
-const DraggableListItem = React.memo(({ id, index, label, moveItem, removeFromMiddleList }) => {
+interface DraggableListItemProps {
+    id: string;
+    index: number;
+    label: string;
+    moveItem: (dragIndex: number, hoverIndex: number) => Promise<void>;
+    removeFromMiddleList: () => void;
+}
+
+const DraggableListItem: React.FC<DraggableListItemProps> = React.memo(({ id, index, label, moveItem, removeFromMiddleList }) => {
     const ref = React.useRef(null);
 
     const [, drop] = useDrop({

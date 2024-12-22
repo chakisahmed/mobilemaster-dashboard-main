@@ -35,7 +35,7 @@ export default function ManageBanners() {
       try {
         const response = await axios.get('/api/banners/create');
         setBanners(response.data);
-      } catch (error) {
+      } catch (error:any) {
         console.error('Error fetching banners:', error);
       }
     };
@@ -77,7 +77,7 @@ export default function ManageBanners() {
         )
       );
       setBanners(updatedOrder);
-    } catch (error) {
+    } catch (error:any) {
       console.error('Error updating banner order:', error);
     }
   };
@@ -99,7 +99,7 @@ export default function ManageBanners() {
       await Promise.all(idsToDelete.map(id => axios.delete(`/api/banners/create/${id}`)));
       setBanners(prevBanners => prevBanners.filter(banner => !checkedBanners.has(banner.id)));
       setCheckedBanners(new Set());
-    } catch (error) {
+    } catch (error:any) {
       console.error('Error deleting banners:', error);
     }
   };

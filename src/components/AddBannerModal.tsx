@@ -46,7 +46,7 @@ export default function AddBannerModal({
                 const res = await products(query, 1);
                 setCatalogProducts(res.items);
             }
-        } catch (error) {
+        } catch (error:any) {
             console.log(error);
         }
         finally {
@@ -99,7 +99,7 @@ export default function AddBannerModal({
             formData.append('name', newBanner.name);
             formData.append('banner_type', newBanner.banner_type);
             formData.append('layout_type', 'bannerimages');
-            formData.append('catalog_id', newBanner.catalog_id);
+            formData.append('catalog_id', newBanner.catalog_id.toString());
             formData.append('order', '0'); // Order should be a string to append to FormData
             formData.append('status', '1');
             let response;
@@ -133,7 +133,7 @@ export default function AddBannerModal({
             setIsModalOpen(false);
             resetForm();
 
-        } catch (error) {
+        } catch (error:any) {
             console.error('Failed to create banner', error);
         }
     };
@@ -177,7 +177,9 @@ export default function AddBannerModal({
                             <Select
                                 options={newBanner.banner_type === 'product' ? catalogProducts?.map((product) => ({ value: product.id, label: product.name })) : catalogCategories?.map((category) => ({ value: category.id, label: category.name }))}
                                 onChange={(selectedOption) => {
-                                    setNewBanner({ ...newBanner, catalog_id: selectedOption.value });
+                                    if (selectedOption) {
+                                        setNewBanner({ ...newBanner, catalog_id: selectedOption.value });
+                                    }
                                 }}
                                 placeholder="Select catalog ID"
                                 isSearchable
@@ -201,7 +203,7 @@ export default function AddBannerModal({
                                 required
                             />
                             {editMode && newBanner.image && (
-                                <img src={newBanner.image} alt="Current Banner" style={{ width: '100px', height: '100px' }} />
+                                <img src={URL.createObjectURL(newBanner.image)} alt="Current Banner" style={{ width: '100px', height: '100px' }} />
                             )}
                         </div>
                         <div className="flex justify-end space-x-4">

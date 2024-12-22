@@ -43,7 +43,7 @@ const ProductsTable = () => {
       const res = await products(query, currentPage);
       setProductData(res.items);
       setTotalCount(res.total_count);
-    } catch (error) {
+    } catch (error:any) {
       console.log(error);
     }
     finally {
@@ -85,7 +85,7 @@ const ProductsTable = () => {
 
         setCategoriesData(flatCategories);
 
-      } catch (error) {
+      } catch (error:any) {
         console.log(error);
       }
     }

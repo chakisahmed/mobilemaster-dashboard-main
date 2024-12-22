@@ -14,7 +14,7 @@ export async function GET(req: Request) {
 
         // Return a success response with the data from the external API
         return NextResponse.json(response.data, { status: 200 });
-    } catch (error) {
+    } catch (error:any) {
         console.error('Error fetching walkthrough data:', error);
         return NextResponse.json({
             error: 'Failed to fetch walkthrough data',

@@ -8,7 +8,9 @@ import DatePickerOne from '../FormElements/DatePicker/DatePickerOne';
 interface ProductsListModalProps {
     onClose: () => void;
     onRefresh: () => void;
+    selectedItem: CarouselItem | null;
 }
+
 const Chip: React.FC<{ label: string; onRemove: () => void }> = ({ label, onRemove }) => (
     <div className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full mr-2 mb-2">
         <span className="truncate max-w-xs">{label}</span>
@@ -17,14 +19,14 @@ const Chip: React.FC<{ label: string; onRemove: () => void }> = ({ label, onRemo
         </button>
     </div>
 );
-const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefresh }) => {
-    const [selectedRows, setSelectedRows] = useState<string[]>([]);
-    const [name, setName] = useState<string>('');
+const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefresh, selectedItem }) => {
+    const [selectedRows, setSelectedRows] = useState<string[]>(selectedItem ? selectedItem.products.map(p => p.name) : []);
+    const [name, setName] = useState<string>(selectedItem ? selectedItem.label : '');
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [products, setProducts] = useState<Product[]>([]);
     const [step, setStep] = useState(1);
-    const [selectedLayout, setSelectedLayout] = useState<string>('');
-    const [selectedProducts, setSelectedProducts] = useState<{ id: string; name: string }[]>([]);
+    const [selectedLayout, setSelectedLayout] = useState<string>(selectedItem ? selectedItem.layout_appearance : '');
+    const [selectedProducts, setSelectedProducts] = useState<{ id: string; name: string }[]>(selectedItem ? selectedItem.products : []);
     const [selectedStartDate, setSelectedStartDate] = useState<string>('');
     const [selectedEndDate, setSelectedEndDate] = useState<string>('');
     const maxProductsNumber = {
@@ -53,7 +55,7 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
             try {
                 const response = await productsApi(searchTerm, undefined);
                 setProducts(response.items);
-            } catch (error) {
+            } catch (error:any) {
                 console.error('Error fetching products:', error);
             }
         };
@@ -86,7 +88,7 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
             console.log('Product carousel created:', response.data);
             onRefresh();
             onClose();
-        } catch (error) {
+        } catch (error:any) {
             console.error('Error creating product carousel:', error);
         }
     };

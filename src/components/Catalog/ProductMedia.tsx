@@ -17,6 +17,8 @@ const ProductMedia: React.FC<ProductMediaProps> = ({images}) => {
                         src={"https://ext.web.wamia.tn/media/catalog/product"+image} // Example image source
                         alt="Product Image 1"
                         className="w-full h-full object-cover"
+                        width={100}
+                        height={100}
                     />
                 </div>))}
             </div>

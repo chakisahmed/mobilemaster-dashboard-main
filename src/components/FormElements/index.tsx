@@ -73,7 +73,7 @@ const FormElements = () => {
               </h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
-              <SwitcherOne />
+              <SwitcherOne id="" onChange={()=>{}}/>
               <SwitcherTwo />
               <SwitcherThree />
               <SwitcherFour />
@@ -88,7 +88,7 @@ const FormElements = () => {
               </h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
-              <DatePickerOne />
+              <DatePickerOne date="" setDate={()=>{}} className=""/>
               <DatePickerTwo />
             </div>
           </div>

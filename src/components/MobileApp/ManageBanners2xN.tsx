@@ -40,7 +40,7 @@ const Manage2x2Banners = ({ bannerGroup }) => {
         );
 
         setBanners(bannersWithItems);
-      } catch (error) {
+      } catch (error:any) {
         console.error('Error fetching banners:', error);
       }
     };
@@ -51,7 +51,7 @@ const Manage2x2Banners = ({ bannerGroup }) => {
     try {
       const response = await axios.get(`/api/banners2xn/banner/${layoutType}`);
       return response.data;
-    } catch (error) {
+    } catch (error:any) {
       console.error(`Error fetching banners for layout type ${layoutType}:`, error);
       return [];
     }
@@ -269,7 +269,7 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
       ]);
 
       setIsModalOpen(false);
-    } catch (error) {
+    } catch (error:any) {
       console.error('Error creating banner:', error);
     }
   };

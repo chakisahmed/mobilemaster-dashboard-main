@@ -45,7 +45,17 @@ const ProductDetails = () => {
               <input type="text" className="w-full p-2 mt-1 rounded-lg border border-gray-300" value={product?.name}/>
             </div>
             <div className="mb-2">
-                <RichTextEditor initialValue={product?.custom_attributes.find((att) => att.attribute_code=="short_description")?.value} height={200}/>
+              <label className="font-medium">Product Description</label>
+              <input type="text" className="w-full p-2 mt-1 rounded-lg border border-gray-300" value={product?.custom_attributes.find((att) => att.attribute_code=="description")?.value}/>
+
+              
+                {/* <RichTextEditor initialValue={
+                  Array.isArray(
+                    product?.custom_attributes.find(
+                      (att) => att.attribute_code=="short_description")?.value) ? product?.custom_attributes.find
+                      ((att) => att.attribute_code=="short_description")?.value[0] : product?.custom_attributes.
+                      find((att) => att.attribute_code=="short_description")?.value[0]} 
+                         height={200}/> */}
               </div>
           </div>
     
@@ -64,11 +74,13 @@ const ProductDetails = () => {
             <div className="mb-2 grid grid-cols-2 gap-4">
               <div>
                 <label className="font-medium">From</label>
-                <DatePickerOne date={product?.custom_attributes.find((att) => att.attribute_code=="special_from_date")?.value ?? ''}/>
+                <p>{product?.custom_attributes.find((att) => att.attribute_code=="special_from_date")?.value ?? ''}</p>
+                {/* <DatePickerOne date={product?.custom_attributes.find((att) => att.attribute_code=="special_from_date")?.value ?? ''}/> */}
               </div>
               <div>
                 <label className="font-medium">To</label>
-                <DatePickerOne date={product?.custom_attributes.find((att) => att.attribute_code=="special_to_date")?.value ?? ''}/>
+                <p>{product?.custom_attributes.find((att) => att.attribute_code=="special_to_date")?.value ?? ''}</p>
+                {/* <DatePickerOne date={product?.custom_attributes.find((att) => att.attribute_code=="special_to_date")?.value ?? ''}/> */}
               </div>
             </div>
           </div>
@@ -101,7 +113,16 @@ const ProductDetails = () => {
             </div>
             <div className="mb-2">
             <label className="font-medium">Barcode</label>
-              <BarcodeComponent value={product?.custom_attributes.find((att) => att.attribute_code=="barcode")?.value ?? ''}/>
+            {(() => {
+              const barcodeValue = product?.custom_attributes.find((att) => att.attribute_code == "barcode")?.value;
+              if (typeof barcodeValue === 'string') {
+                return <BarcodeComponent value={barcodeValue} />;
+              } else if (Array.isArray(barcodeValue)) {
+                return barcodeValue.map((value, index) => <BarcodeComponent key={index} value={value} />);
+              } else {
+                return <span>No barcode available</span>;
+              }
+            })()}
             </div>
             <div className='mb-2'>
             <label className="font-medium">Stock quantity</label>

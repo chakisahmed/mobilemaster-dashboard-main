@@ -25,7 +25,7 @@ const handleRowClick = (item: WalkthroughType) => {
         try {
             const data = await getWalkthroughData();
             setWalkthroughItems(data);
-        } catch (error) {
+        } catch (error:any) {
             console.error('Error fetching walkthrough items:', error);
         }
     };
@@ -48,7 +48,7 @@ const handleRowClick = (item: WalkthroughType) => {
             const response = await postWalkthroughData(newWalkthrough as WalkthroughType);
             setWalkthroughItems([...walkthroughItems, response]);
             handleCloseModal();
-        } catch (error) {
+        } catch (error:any) {
             console.error('Error creating walkthrough item:', error);
         }
     };
@@ -73,7 +73,7 @@ const handleRowClick = (item: WalkthroughType) => {
 
                                 setWalkthroughItems(walkthroughItems.filter((item) => !checkedWalkthroughItems.includes(item)));
                                 setCheckedWalkthroughItems([]);
-                            } catch (error) {
+                            } catch (error:any) {
                                 console.error('Error deleting walkthrough items:', error);
                             }
                         }}

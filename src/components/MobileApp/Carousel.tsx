@@ -1,5 +1,12 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+
+interface CarouselItem {
+    id: string;
+    label: string;
+    products: { name: string }[];
+    layout_appearance: string;
+}
 import axios from 'axios';
 import { renderLayoutAppearance } from './renderLayoutAppearance';
 import ProductsListModal from './ProductsListModal';
@@ -8,12 +15,13 @@ const Carousel: React.FC = () => {
     const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [checkedItems, setCheckedItems] = useState<string[]>([]);
+    const [selectedItem, setSelectedItem] = useState<CarouselItem | null>(null);
 
     const fetchCarouselItems = async () => {
         try {
             const response = await axios.get('/api/carousel');
             setCarouselItems(response.data);
-        } catch (error) {
+        } catch (error:any) {
             console.error('Error fetching carousel items:', error);
         }
     };
@@ -23,6 +31,13 @@ const Carousel: React.FC = () => {
     }, []);
 
     const handleCreateClick = () => {
+        setSelectedItem(null); // Clear selected item for new creation
+        setIsModalOpen(true);
+    };
+
+    const handleEditClick = (id: string) => {
+        const item = carouselItems.find((carouselItem) => carouselItem.id === id);
+        setSelectedItem(item || null);
         setIsModalOpen(true);
     };
 
@@ -49,7 +64,7 @@ const Carousel: React.FC = () => {
                                 prevCarouselItems.filter((item) => !checkedItems.includes(item.id))
                             );
                             setCheckedItems([]);
-                        } catch (error) {
+                        } catch (error:any) {
                             console.error('Error deleting carousel items:', error);
                         }
                     }}
@@ -111,7 +126,7 @@ const Carousel: React.FC = () => {
                     ))}
                 </tbody>
             </table>
-            {isModalOpen && <ProductsListModal onClose={handleCloseModal} onRefresh={fetchCarouselItems} />}
+            {isModalOpen && <ProductsListModal onClose={handleCloseModal} onRefresh={fetchCarouselItems} selectedItem={selectedItem} />}
         </div>
     );
 };

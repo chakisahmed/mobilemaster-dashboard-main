@@ -68,7 +68,7 @@ const Categories = () => {
       try {
         const res = await categories();
         setCategoriesData(res);
-      } catch (error) {
+      } catch (error:any) {
         console.log(error);
       }
     };
@@ -80,7 +80,7 @@ const Categories = () => {
         const res = await categoryById(currentCategoryId);
         console.log(res.name);
         setCurrentCategory(res);
-      } catch (error) {
+      } catch (error:any) {
         console.log(error);
       }
     }

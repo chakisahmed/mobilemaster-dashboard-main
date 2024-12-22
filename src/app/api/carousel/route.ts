@@ -17,7 +17,7 @@ export async function GET(req: Request) {
         // Return a success response with the data from the external API
         console.log('carousel GET response', response.data);
         return NextResponse.json(response.data, { status: 200 });
-    } catch (error) {
+    } catch (error:any) {
         console.error('Error fetching product carousel:', error);
         return NextResponse.json({
             error: 'Failed to fetch product carousel',
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
 
         // Return a success response with the data from the external API
         return NextResponse.json(response.data, { status: 201 });
-    } catch (error) {
+    } catch (error:any) {
         console.error('Error creating product carousel:', error);
         return NextResponse.json({
             error: 'Failed to create product carousel',

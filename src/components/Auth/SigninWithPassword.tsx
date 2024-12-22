@@ -18,8 +18,8 @@ export default function SigninWithPassword() {
       const response = await login(username, password);
       //console.log(response);
       window.location.href = "/";
-    } catch (error) {
-      console.error(error);
+    } catch (error:any) {
+      console.log(error);
     }
   }
 

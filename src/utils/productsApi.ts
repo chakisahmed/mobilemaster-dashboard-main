@@ -62,7 +62,7 @@ export async function products(searchTerm: string | undefined, currentPage: numb
     });
     console.log('Protected data:', response.data);
     return { items: response.data.items as Product[], total_count: response.data.total_count };
-  } catch (error) {
+  } catch (error:any) {
     console.error('Error fetching data:', error.response?.data || error.message);
     return { items: [], total_count: 0 };
   }
@@ -72,7 +72,7 @@ export async function productBySku(sku: string): Promise<Product> {
     const response = await axios.get(`/api/products/${sku}`);
     console.log(`Protected data (product with sku ${sku}):`, response.data);
     return response.data as Product;
-  } catch (error) {
+  } catch (error:any) {
     console.error('Error fetching data:', error.response?.data || error.message);
     return {} as Product;
   }

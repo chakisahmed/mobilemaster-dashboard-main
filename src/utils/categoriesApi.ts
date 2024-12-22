@@ -56,7 +56,7 @@ export async function categories(): Promise<Category> {
     
     
     return response.data as Category;
-  } catch (error) {
+  } catch (error:any) {
     console.error('Error fetching data:', error.response?.data || error.message);
   }
 }
@@ -64,7 +64,7 @@ export async function categoryById(categoryId:number) : Promise<any>{
   try {
     const response = await axios.get(`/api/categories/${categoryId}`);
     return response.data; 
-  } catch (error) {
+  } catch (error:any) {
     console.log('Error fetching data:', error.response?.data || error.message)
   }
 }
@@ -72,7 +72,7 @@ export async function categoriesByName(name:string) : Promise<any>{
   try {
     const response = await axios.get(`/api/categories/list?name=${name}`);
     return response.data; 
-  } catch (error) {
+  } catch (error:any) {
     console.log('Error fetching data:', error.response?.data || error.message)
   }
 }

@@ -14,7 +14,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
       },
     });
     return NextResponse.json(response.data, { status: 200 });
-  } catch (error) {
+  } catch (error:any) {
     console.error(`Error fetching banners for id ${id}:`, error);
     return NextResponse.json({ error: 'Failed to fetch banners' }, { status: 500 });
   }
@@ -30,7 +30,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       },
     });
     return NextResponse.json({ message: 'Banner deleted successfully' }, { status: 200 });
-  } catch (error) {
+  } catch (error:any) {
     console.error(`Error deleting banner for id ${id}:`, error);
     return NextResponse.json({ error: 'Failed to delete banner' }, { status: 500 });
   }
@@ -51,7 +51,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       }
     );
     return NextResponse.json(response.data, { status: 200 });
-  } catch (error) {
+  } catch (error:any) {
     console.error(`Error updating banner for id ${id}:`, error);
     return NextResponse.json({ error: 'Failed to update banner' }, { status: 500 });
   }
