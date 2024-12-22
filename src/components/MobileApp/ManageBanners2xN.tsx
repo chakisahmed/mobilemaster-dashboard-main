@@ -3,10 +3,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { convertToBase64 } from '../../utils/file_utils';
 
-const Manage2x2Banners = ({ bannerGroup }) => {
+interface Manage2x2BannersProps {
+  bannerGroup: any; // Replace 'any' with the appropriate type if known
+}
+
+const Manage2x2Banners = ({ bannerGroup }: Manage2x2BannersProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [banners, setBanners] = useState([]);
-  const [selectedBanners, setSelectedBanners] = useState([]);
+  const [banners, setBanners] = useState<any[]>([]);
+  const [selectedBanners, setSelectedBanners] = useState<number[]>([]);
   const [bannerToEdit, setBannerToEdit] = useState(null);
 
   const handleDeleteSelected = async () => {
@@ -33,7 +37,7 @@ const Manage2x2Banners = ({ bannerGroup }) => {
         const bannerContainers = response.data;
 
         const bannersWithItems = await Promise.all(
-          bannerContainers.map(async (banner) => {
+          bannerContainers.map(async (banner:any) => {
             const items = await fetchBannerItems(banner.layout_type + '-' + banner.id);
             return { ...banner, items };
           })
@@ -47,7 +51,7 @@ const Manage2x2Banners = ({ bannerGroup }) => {
     fetchBanners();
   }, []);
 
-  const fetchBannerItems = async (layoutType) => {
+  const fetchBannerItems = async (layoutType:any) => {
     try {
       const response = await axios.get(`/api/banners2xn/banner/${layoutType}`);
       return response.data;
@@ -57,12 +61,12 @@ const Manage2x2Banners = ({ bannerGroup }) => {
     }
   };
 
-  const handleEditBanner = (banner) => {
+  const handleEditBanner = (banner:any) => {
     setBannerToEdit(banner);
     setIsModalOpen(true);
   };
 
-  const handleCheckboxChange = (id) => {
+  const handleCheckboxChange = (id:any) => {
     setSelectedBanners((prevSelected) =>
       prevSelected.includes(id)
         ? prevSelected.filter((bannerId) => bannerId !== id)
@@ -138,7 +142,7 @@ const Manage2x2Banners = ({ bannerGroup }) => {
                   <td className="px-4 py-2">{banner.name}</td>
                   <td className="px-4 py-2">
                     <div className="flex space-x-2">
-                        {banner.items && banner.items.map((item, index) => (
+                        {banner.items && banner.items.map((item:any, index:number) => (
                         <img
                           key={index}
                           src={item.image}
@@ -172,9 +176,16 @@ const Manage2x2Banners = ({ bannerGroup }) => {
   );
 };
 
-const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
+interface CreateBannerModalProps {
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setBanners: React.Dispatch<React.SetStateAction<any[]>>;
+  bannerGroup: any; // Replace 'any' with the appropriate type if known
+  bannerToEdit: any; // Replace 'any' with the appropriate type if known
+}
+
+const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerGroup, bannerToEdit }: CreateBannerModalProps) => {
   const [name, setName] = useState(bannerToEdit ? bannerToEdit.name : '');
-  const [images, setImages] = useState(bannerToEdit ? bannerToEdit.items.map(item => ({
+  const [images, setImages] = useState(bannerToEdit ? bannerToEdit.items.map((item:any) => ({
     image: item.image,
     banner_type: item.banner_type || 'category',
     catalog_id: item.catalog_id || '',
@@ -186,7 +197,7 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
     { image: null, banner_type: 'category', catalog_id: '', name: '' }
   ]);
 
-  const handleImageChange = (index, file) => {
+  const handleImageChange = (index:number, file:File) => {
     convertToBase64(file).then((base64String) => {
       console.log('file before:', file);
       console.log('Base64 image:', base64String);
@@ -196,25 +207,25 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
     setImages(newImages);
   };
 
-  const handleBannerTypeChange = (index, value) => {
+  const handleBannerTypeChange = (index:number, value:string) => {
     const newImages = [...images];
     newImages[index].banner_type = value;
     setImages(newImages);
   };
 
-  const handleCatalogIdChange = (index, value) => {
+  const handleCatalogIdChange = (index:number, value:number) => {
     const newImages = [...images];
     newImages[index].catalog_id = value;
     setImages(newImages);
   };
 
-  const handleNameChange = (index, value) => {
+  const handleNameChange = (index: number, value: string) => {
     const newImages = [...images];
     newImages[index].name = value;
     setImages(newImages);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       let response;
@@ -231,7 +242,7 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
           formData.append('name', image.name);
           formData.append('banner_type', image.banner_type);
           formData.append('catalog_id', image.catalog_id);
-          formData.append('order', i);
+          formData.append('order', i.toString());
           formData.append('status', '1');
           formData.append('layout_type', 'banner2x2-' + bannerGroup.id);
   
@@ -289,7 +300,7 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
             />
           </label>
           <div className="grid grid-cols-2 gap-4 mb-4">
-            {images.map((image, index) => (
+            {images.map((image: { image: string | Blob | MediaSource | undefined; banner_type: string | number | readonly string[] | undefined; catalog_id: string | number | readonly string[] | undefined; name: string | number | readonly string[] | undefined; }, index: number) => (
               <div key={index} className="flex flex-col items-center">
               {image.image && (
                 <img
@@ -301,7 +312,9 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
               )}
               <input
                 type="file"
-                onChange={(e) => handleImageChange(index, e.target.files[0])}
+                onChange={(e) => {
+                  if (e.target.files && index)
+                  handleImageChange(index, e.target.files[0])}}
                 required={index===0}
                 className="border p-1 w-full"
               />
@@ -314,9 +327,11 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerToEdit }) => {
                 <option value="category">Category</option>
               </select>
               <input
-                type="text"
+                type="number"
                 value={image.catalog_id}
-                onChange={(e) => handleCatalogIdChange(index, e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value)
+                  handleCatalogIdChange(index, Number(e.target.value))}}
                 placeholder="Catalog ID"
                 className="border p-1 mt-1 w-full"
               />

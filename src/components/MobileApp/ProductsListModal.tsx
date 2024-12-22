@@ -8,7 +8,7 @@ import DatePickerOne from '../FormElements/DatePicker/DatePickerOne';
 interface ProductsListModalProps {
     onClose: () => void;
     onRefresh: () => void;
-    selectedItem: CarouselItem | null;
+    selectedItem: any | null;
 }
 
 const Chip: React.FC<{ label: string; onRemove: () => void }> = ({ label, onRemove }) => (
@@ -20,12 +20,12 @@ const Chip: React.FC<{ label: string; onRemove: () => void }> = ({ label, onRemo
     </div>
 );
 const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefresh, selectedItem }) => {
-    const [selectedRows, setSelectedRows] = useState<string[]>(selectedItem ? selectedItem.products.map(p => p.name) : []);
+    const [selectedRows, setSelectedRows] = useState<string[]>(selectedItem ? selectedItem.products.map((p:any) => p.name) : []);
     const [name, setName] = useState<string>(selectedItem ? selectedItem.label : '');
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [products, setProducts] = useState<Product[]>([]);
     const [step, setStep] = useState(1);
-    const [selectedLayout, setSelectedLayout] = useState<string>(selectedItem ? selectedItem.layout_appearance : '');
+    const [selectedLayout, setSelectedLayout] = useState<'layout1' | 'layout2' | 'layout3'>(selectedItem ? selectedItem.layout_appearance : 'layout1');
     const [selectedProducts, setSelectedProducts] = useState<{ id: string; name: string }[]>(selectedItem ? selectedItem.products : []);
     const [selectedStartDate, setSelectedStartDate] = useState<string>('');
     const [selectedEndDate, setSelectedEndDate] = useState<string>('');
@@ -191,7 +191,7 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
                                             key={product.id}
                                             className={`cursor-pointer ${selectedRows.includes(product.id + '') ? 'bg-blue-100' : ''}`}
                                             onClick={() => {
-                                                if(selectedProducts.length < maxProductsNumber[selectedLayout]){
+                                                if(selectedProducts.length < maxProductsNumber[selectedLayout as 'layout1' | 'layout2' | 'layout3']){
                                                 toggleRowSelection(product.id + '', product.name)
                                                 }
                                             }}

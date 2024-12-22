@@ -14,11 +14,7 @@ export async function getWalkthroughData(): Promise<WalkthroughType[]> {
         const response = await axios.get('/api/walkthrough');
         return response.data as WalkthroughType[];
     } catch (error:any) {
-        console.error('Error fetching walkthrough data:', error);
-        return {
-            error: 'Failed to fetch walkthrough data',
-            details: error.message
-        };
+        throw new Error('Error fetching walkthrough data: ' + error.message);
     }
 }
 export async function postWalkthroughData(data: WalkthroughType): Promise<WalkthroughType> {
@@ -27,10 +23,7 @@ export async function postWalkthroughData(data: WalkthroughType): Promise<Walkth
         return response.data as WalkthroughType;
     } catch (error:any) {
         console.error('Error posting walkthrough data:', error);
-        return {
-            error: 'Failed to post walkthrough data',
-            details: error.message
-        };
+        throw new Error('Error posting walkthrough data: ' + error.message);
     }
 }
 //delete

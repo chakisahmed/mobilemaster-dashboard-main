@@ -1,6 +1,6 @@
 import { serialize } from 'cookie';
 
-export default function handler(req, res) {
+export default function handler(res: any) {
   res.setHeader(
     'Set-Cookie',
     serialize('accessToken', '', {

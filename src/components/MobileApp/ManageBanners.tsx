@@ -22,7 +22,7 @@ interface BannerType {
 
 export default function ManageBanners() {
   const [banners, setBanners] = useState<BannerType[]>([]);
-  const [selectedBanner, setSelectedBanner] = useState(null);
+  const [selectedBanner, setSelectedBanner] = useState<BannerType | null>(null);
   const [checkedBanners, setCheckedBanners] = useState<Set<string>>(new Set());
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,7 +43,7 @@ export default function ManageBanners() {
     fetchBanners();
   }, []);
   
-  const handleEdit = (banner: BannerType) => {
+  const handleEdit = (banner: BannerType | null) => {
     setSelectedBanner(banner);
     setEditMode(true);
     setIsModalOpen(true);
@@ -66,7 +66,7 @@ export default function ManageBanners() {
     // Update the order of the banners
     const updatedOrder = updatedBanners.map((banner, index) => ({
       ...banner,
-      order: index + 1,
+      order: (index + 1).toString(),
     }));
 
 

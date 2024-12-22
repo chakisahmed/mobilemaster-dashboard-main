@@ -78,12 +78,10 @@ const ProductsTable = () => {
           }
           return categories;
         }
-        const flatCategories = flatten(res);
+        if(res)
+        {const flatCategories = flatten(res);
         console.log("length", flatCategories.entries.length);
-
-        
-
-        setCategoriesData(flatCategories);
+        setCategoriesData(flatCategories);}
 
       } catch (error:any) {
         console.log(error);
@@ -195,9 +193,12 @@ const ProductsTable = () => {
           </div>
           <div className="col-span-2 hidden items-center sm:flex">
             <p className="text-body-sm font-medium text-dark dark:text-dark-6">
-              {product.custom_attributes.find( 
+            {Array.isArray(product.custom_attributes.find( 
                 (attr) => attr.attribute_code === "category_ids"
-              )?.value.map((id: string) => mapIdToCategory(Number(id))).slice(2).join(", ")}
+              )?.value) ? (product.custom_attributes.find( 
+                (attr) => attr.attribute_code === "category_ids"
+              )?.value as string[]).map((id: string) => mapIdToCategory(Number(id))).slice(2).join(", ") : ""}
+            
             </p>
           </div>
           <div className="col-span-1 flex items-center">

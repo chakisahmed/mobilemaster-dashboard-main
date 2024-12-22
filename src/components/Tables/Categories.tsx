@@ -43,7 +43,7 @@ const Categories = () => {
   const [categoriesData, setCategoriesData] = useState<Category>();
   const [currentCategoryId,setCurrentCategoryId] = useState<number>(2);
   const [currentCategory, setCurrentCategory] = useState<CategoryDeatils>();
-  const [uploadedImage, setUploadedImage] = useState<{image:string,magefan_og_image:string}>({image:'',magefan_og_image:''});
+  const [uploadedImage, setUploadedImage] = useState<Record<string, string>>({image:'',magefan_og_image:''});
   const [isActive, setIsActive] = useState<boolean>(false);
   const [includeInMenu, setIncludeInMenu] = useState<boolean>(false);
   const handleIsActiveChange = (value: boolean) => {

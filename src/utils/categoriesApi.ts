@@ -1,13 +1,16 @@
 import axios from 'axios';
 export interface Category {
+  url: string | undefined;
   id: number;
   parent_id: number;
   name: string;
   is_active: boolean;
   position: number;
   level: number;
+  category_id?: number;
   product_count: number;
   children_data: Category[];
+  image?: string;
 }
 /**
  * 
@@ -50,7 +53,7 @@ export interface CategoryDeatils{
 
 }
 //oprional category id param
-export async function categories(): Promise<Category> {
+export async function categories(): Promise<Category | undefined> {
   try {
     const response = await axios.get('/api/categories');
     

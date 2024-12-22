@@ -7,9 +7,9 @@ import Select from 'react-select';
 let RANGE = 8;
 
 const FeaturedCategoriesPage: React.FC = () => {
-    const [categories, setCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [checkedCategories, setCheckedCategories] = useState<Set<string>>(new Set());
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+    const [checkedCategories, setCheckedCategories] = useState<Set<number>>(new Set());
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [catalogCategories, setCatalogCategories] = useState<Set<Category>>();
@@ -26,12 +26,17 @@ const FeaturedCategoriesPage: React.FC = () => {
                     }
                     return categories;
                 }
-                const flatCategories = flatten(response);
-                console.log("length", flatCategories.entries.length);
+                if (response) {
+                    const flatCategories = flatten(response);
+                    console.log("length", flatCategories.entries.length);
+                    setCatalogCategories(flatCategories);
+                }else{
+                    console.log("no data")
+                }
 
 
 
-                setCatalogCategories(flatCategories);
+                
             } catch (error:any) {
                 console.error('Error fetching catalog categories:', error);
 
@@ -58,7 +63,7 @@ const FeaturedCategoriesPage: React.FC = () => {
                 response = await axios.put(`/api/featuredcategories`, selectedCategory);
 
             } else {
-                response = await axios.post('/api/featuredcategories', { ...selectedCategory, layout_type: 'featuredCategories' });
+                response = await axios.post('/api/featuredcategories', { ...(selectedCategory || {}), layout_type: 'featuredCategories' });
             }
 
             if (response != null) {
@@ -101,7 +106,7 @@ const FeaturedCategoriesPage: React.FC = () => {
                                         checkedCategories.forEach(async (categoryId) => {
                                             await axios.delete(`/api/featuredcategories/${categoryId}`);
                                         });
-                                        setCategories(categories.filter((category) => !checkedCategories.has(category.id)));
+                                        setCategories(categories.filter((category) => !checkedCategories.has(Number(category.id))));
                                         setCheckedCategories(new Set());
                                     } catch (error:any) {
                                         console.error('Error deleting categories:', error);
@@ -194,7 +199,15 @@ const FeaturedCategoriesPage: React.FC = () => {
                             <input
                                 type="text"
                                 value={selectedCategory?.name}
-                                onChange={(e) => setSelectedCategory({ ...selectedCategory, name: e.target.value })}
+                                onChange={(e) => {
+                                    if (selectedCategory) {
+                                        
+                                        setSelectedCategory(
+                                            { ...selectedCategory, 
+                                                name: e.target.value, 
+                                                url: selectedCategory?.url || '' }
+                                            )}}
+                                        }
                                 className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 required
                             />
@@ -208,9 +221,10 @@ const FeaturedCategoriesPage: React.FC = () => {
                                 }))}
                                 value={selectedCatalogCategory ? { value: selectedCatalogCategory.id, label: selectedCatalogCategory.name } : null}
                                 onChange={(selectedOption) => {
-                                    const selectedCategory = Array.from(catalogCategories || []).find(category => category.id === selectedOption.value);
+                                    const selectedCategory = Array.from(catalogCategories || []).find(category => category.id === selectedOption?.value);
                                     setSelectedCatalogCategory(selectedCategory);
-                                    setSelectedCategory({ ...selectedCategory, category_id: selectedOption.value });
+                                    if (selectedCategory)
+                                    setSelectedCategory({ ...selectedCategory, category_id: selectedOption?.value });
                                 }}
                                 className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             />
@@ -222,6 +236,7 @@ const FeaturedCategoriesPage: React.FC = () => {
                                 onChange={(e) => {
                                     if (e.target.files && e.target.files[0]) {
                                         convertToBase64(e.target.files[0]).then((base64) => {
+                                            if (selectedCategory)
                                             setSelectedCategory({ ...selectedCategory, image: base64 });
                                         });
                                     }
