@@ -49,9 +49,8 @@ const ChartFive: React.FC = () => {
       position: "top",
       horizontalAlign: "left",
       fontFamily: "Satoshi",
-
       markers: {
-        radius: 99,
+        // radius: 99, // Removed invalid property
       },
     },
     grid: {
