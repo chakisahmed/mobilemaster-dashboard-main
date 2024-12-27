@@ -84,8 +84,8 @@ const ChartTwo: React.FC = () => {
         //radius: 99,
         //width: 16,
         // height: 16,
-        strokeWidth: 10,
-        strokeColor: "transparent",
+        // strokeWidth: 10,
+        // strokeColor: "transparent",
       },
     },
     fill: {
