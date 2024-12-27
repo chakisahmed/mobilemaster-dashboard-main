@@ -180,7 +180,7 @@ const ProductsTable = () => {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="h-12.5 w-15 rounded-md">
                 <Image
-                  src={"https://ext.web.wamia.tn/media/catalog/product"+ (product.media_gallery_entries.length>0? product.media_gallery_entries[0].file :"")}
+                  src={"https://customer.wamia.tn/media/catalog/product"+ (product.media_gallery_entries.length>0? product.media_gallery_entries[0].file :"")}
                   width={60}
                   height={50}
                   alt="Product"

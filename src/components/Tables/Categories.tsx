@@ -173,7 +173,7 @@ const Categories = () => {
         onChange={(event) => handleFileChange(event,attribute)}
       />
       <img
-        src={uploadedImage[attribute] || `https://ext.web.wamia.tn/${attValue.includes('/media/catalog/category/') ? '' : 'media/catalog/category/'}${attValue}`}
+        src={uploadedImage[attribute] || `https://customer.wamia.tn/${attValue.includes('/media/catalog/category/') ? '' : 'media/catalog/category/'}${attValue}`}
         alt={attribute}
         className="h-30 pt-2"
       />

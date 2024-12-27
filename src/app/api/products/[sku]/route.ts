@@ -18,10 +18,10 @@ export async function GET(req: Request) {
         const sku = url.pathname.split('/').pop();
 
         // Fetch products data from Magento API with additional parameters
-        const response = await axios.get(`https://ext.web.wamia.tn/rest/V1/products/${sku}`, {
+        const response = await axios.get(`https://customer.wamia.tn/rest/V1/products/${sku}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
-        const stockResponse = await axios.get(`https://ext.web.wamia.tn/rest/V1/stockItems/${sku}`, {
+        const stockResponse = await axios.get(`https://customer.wamia.tn/rest/V1/stockItems/${sku}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
         

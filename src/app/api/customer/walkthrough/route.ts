@@ -5,7 +5,7 @@ import axios from 'axios';
 export async function GET(req: Request) {
     try {
         // Send GET request to external API using axios
-        const response = await axios.get('https://ext.web.wamia.tn/rest/V1/customermobile/walkthrough', {
+        const response = await axios.get('https://customer.wamia.tn/rest/V1/customermobile/walkthrough', {
             headers: {
                 'Content-Type': 'application/json',
 

@@ -11,7 +11,7 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const categoryId = url.pathname.split('/').pop();
    
-    const response = await axios.get(`https://ext.web.wamia.tn/rest/V1/categories/${categoryId}`, {
+    const response = await axios.get(`https://customer.wamia.tn/rest/V1/categories/${categoryId}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 

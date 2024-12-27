@@ -201,7 +201,7 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
                                             <td className="py-2 px-4 border-b text-left">{product.name}</td>
                                             <td className="py-2 px-4 border-b text-left">
                                                 <img
-                                                    src={"https://ext.web.wamia.tn/media/catalog/product" + product.media_gallery_entries[0]?.file}
+                                                    src={"https://customer.wamia.tn/media/catalog/product" + product.media_gallery_entries[0]?.file}
                                                     alt={product.name}
                                                     className="w-12 h-12 object-cover"
                                                 />
