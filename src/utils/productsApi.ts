@@ -52,6 +52,8 @@ export type Product = {
     qty: number;
   };
 };
+
+
 export async function products(searchTerm: string | undefined, currentPage: number | undefined): Promise<{ items: Product[], total_count: number }> {
   try {
     const response = await axios.get('/api/products', {
@@ -60,7 +62,7 @@ export async function products(searchTerm: string | undefined, currentPage: numb
         currentPage
       }
     });
-    console.log('Protected data:', response.data);
+    //console.log('Protected data:', response.data);
     return { items: response.data.items as Product[], total_count: response.data.total_count };
   } catch (error:any) {
     console.error('Error fetching data:', error.response?.data || error.message);
