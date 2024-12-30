@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { convertToBase64 } from '@/utils/file_utils';
-import { categories as categoriesApi, Category } from '@/utils/categoriesApi';
+import { categoriesByName as categoriesApi, Category } from '@/utils/categoriesApi';
 import Select from 'react-select';
 let RANGE = 8;
 
@@ -14,36 +14,36 @@ const FeaturedCategoriesPage: React.FC = () => {
     const [editMode, setEditMode] = useState(false);
     const [catalogCategories, setCatalogCategories] = useState<Set<Category>>();
     const [selectedCatalogCategory, setSelectedCatalogCategory] = useState<Category>();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchTerm(searchTerm);
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchTerm]);
+
     useEffect(() => {
         const fetchCatalogCategories = async () => {
             try {
-                const response = await categoriesApi()
-                const flatten = (category: Category): Set<Category> => {
-                    let categories: Set<Category> = new Set([category]);
-                    for (const child of category.children_data) {
-                        const childCategories = flatten(child);
-                        childCategories.forEach(cat => categories.add(cat));
-                    }
-                    return categories;
-                }
-                if (response) {
-                    const flatCategories = flatten(response);
-                    console.log("length", flatCategories.entries.length);
-                    setCatalogCategories(flatCategories);
-                }else{
-                    console.log("no data")
-                }
-
-
-
+                const response = await categoriesApi(debouncedSearchTerm);
                 
-            } catch (error:any) {
+                if (response) {
+                    
+                    setCatalogCategories(response.items);
+                } else {
+                    console.log("no data");
+                }
+            } catch (error: any) {
                 console.error('Error fetching catalog categories:', error);
-
             }
-        }
+        };
         fetchCatalogCategories();
-    }, []);
+    }, [debouncedSearchTerm]);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -121,25 +121,14 @@ const FeaturedCategoriesPage: React.FC = () => {
                 </div>
 
                 <div className="mt-7">
-
                     <table className="min-w-full divide-y divide-gray-200 mt-7">
                         <thead className="bg-gray-50">
                             <tr>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Name
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Image
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Category ID
-                                </th>
-                                <th scope="col" className="relative px-6 py-3">
-                                    <span className="sr-only">Edit</span>
-                                </th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category ID</th>
+                                <th scope="col" className="relative px-6 py-3"><span className="sr-only">Edit</span></th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
@@ -185,9 +174,6 @@ const FeaturedCategoriesPage: React.FC = () => {
                         </tbody>
                     </table>
                 </div>
-
-
-
             </div>
 
             {isModalOpen && (
@@ -226,6 +212,7 @@ const FeaturedCategoriesPage: React.FC = () => {
                                     if (selectedCategory)
                                     setSelectedCategory({ ...selectedCategory, category_id: selectedOption?.value });
                                 }}
+                                onInputChange={(inputValue) => setSearchTerm(inputValue)}
                                 className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             />
                         </div>
