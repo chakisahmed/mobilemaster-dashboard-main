@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Product, products as productsApi } from '@/utils/productsApi';
+import { Product, productBySku, products as productsApi } from '@/utils/productsApi';
 import { renderLayoutAppearance } from './renderLayoutAppearance';
 import DatePickerOne from '../FormElements/DatePicker/DatePickerOne';
 
@@ -29,6 +29,8 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
     const [selectedProducts, setSelectedProducts] = useState<{ id: string; name: string }[]>(selectedItem ? selectedItem.products : []);
     const [selectedStartDate, setSelectedStartDate] = useState<string>('');
     const [selectedEndDate, setSelectedEndDate] = useState<string>('');
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalCount, setTotalCount] = useState<number>(0);
     const maxProductsNumber = {
         'layout1':20,
         'layout2':5,
@@ -51,17 +53,23 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
     };
 
     useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
+
+    useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await productsApi(searchTerm, undefined);
+                const response = await productsApi(searchTerm, currentPage);
+                console.log('Products:', response.items);
                 setProducts(response.items);
+                setTotalCount(response.total_count);
             } catch (error:any) {
                 console.error('Error fetching products:', error);
             }
         };
 
         fetchProducts();
-    }, [searchTerm]);
+    }, [searchTerm, currentPage]);
 
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -99,6 +107,36 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
 
     const handlePreviousStep = () => {
         setStep((prevStep) => prevStep - 1);
+    };
+
+    const renderPaginationButtons = () => {
+        const totalPages = Math.ceil(totalCount / 20);
+        const buttons = [];
+
+        for (let i = 1; i <= totalPages; i++) {
+            if (
+                i <= 3 ||
+                i > totalPages - 3 ||
+                (i >= currentPage - 1 && i <= currentPage + 1)
+            ) {
+                buttons.push(
+                    <button
+                        key={i}
+                        className={`mx-1 px-3 py-1 rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                        onClick={() => setCurrentPage(i)}
+                    >
+                        {i}
+                    </button>
+                );
+            } else if (
+                (i === 4 && currentPage > 5) ||
+                (i === totalPages - 3 && currentPage < totalPages - 4)
+            ) {
+                buttons.push(<span key={i} className="mx-1">...</span>);
+            }
+        }
+
+        return buttons;
     };
 
     return (
@@ -186,13 +224,24 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {products.map((product) => (
+                                    {products.map((product) => { 
+                                        return (
                                         <tr
                                             key={product.id}
-                                            className={`cursor-pointer ${selectedRows.includes(product.id + '') ? 'bg-blue-100' : ''}`}
-                                            onClick={() => {
-                                                if(selectedProducts.length < maxProductsNumber[selectedLayout as 'layout1' | 'layout2' | 'layout3']){
+                                            className={`cursor-pointer ${(product.status === 0)? 'bg-gray-100' : selectedRows.includes(product.id + '') ? 'bg-blue-100' : ''}`}
+                                            onClick={async () => {
+                                                const prodDetails = await productBySku(product.sku);
+                                                console.log('Selected products:', prodDetails);
+                                                if(selectedProducts.length < maxProductsNumber[selectedLayout as 'layout1' | 'layout2' | 'layout3']
+                                                     &&product.status === 1 && (prodDetails.stock.is_in_stock && prodDetails.stock.qty > 0 || prodDetails.type_id === 'configurable')
+                                                ){
                                                 toggleRowSelection(product.id + '', product.name)
+                                                }
+                                                else if(selectedProducts.length == maxProductsNumber[selectedLayout as 'layout1' | 'layout2' | 'layout3']){
+                                                    alert('You can only select up to '+maxProductsNumber[selectedLayout as 'layout1' | 'layout2' | 'layout3']+' products')
+                                                }
+                                                else if(!(prodDetails.stock.is_in_stock && prodDetails.stock.qty > 0)){
+                                                    alert('Product is out of stock')
                                                 }
                                             }}
                                         >
@@ -207,9 +256,12 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
                                                 />
                                             </td>
                                         </tr>
-                                    ))}
+                                    )})}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="flex justify-center py-4">
+                            {renderPaginationButtons()}
                         </div>
                         <div className="flex justify-end space-x-2 mt-4">
                         <button
