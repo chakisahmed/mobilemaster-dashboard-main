@@ -37,6 +37,7 @@ export async function GET(req: Request) {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
 
+
         return NextResponse.json(response.data);
     } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
