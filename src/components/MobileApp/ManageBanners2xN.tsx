@@ -441,7 +441,7 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerGroup, bannerToEd
 
 
 
-                <Select
+                {image.banner_type!=null && <Select
                                 options={image.banner_type === 'product' ? catalogProducts[index].map((product) => ({ value: product.id, label: product.name })) : catalogCategories[index].map((category) => ({ value: category.id, label: category.name }))}
                                 onChange={(selectedOption) => {
                                     if (selectedOption) {
@@ -461,7 +461,15 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerGroup, bannerToEd
                                       handleCatalogIdChange(index, null);
                                     }
                                 }}
-                                value={image.banner_type === 'product' ? selectedProduct[index] ? { value: selectedProduct[index].id, label: selectedProduct[index].name } : null : selectedCatalogCategory[index] ? { value: selectedCatalogCategory[index].id, label: selectedCatalogCategory[index].name } : null}
+                                value={
+                                  image.banner_type === 'product' 
+                                  ? (selectedProduct[index]?.id ? { value: selectedProduct[index]?.id, label: selectedProduct[index]?.name } 
+                                  : null) 
+                                  : 
+                                  (selectedCatalogCategory[index]?.id 
+                                    ? { value: selectedCatalogCategory[index]?.id, 
+                                      label: selectedCatalogCategory[index]?.name 
+                                    } : null)}
 
                                 placeholder="Select catalog ID"
                                 isSearchable
@@ -474,7 +482,7 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerGroup, bannerToEd
 
 
 
-                            />
+                            />}
                 {/* <Select
                                 options={image.banner_type === 'product' ? catalogProducts[index].map((product) => ({ value: product.id, label: product.name })) : catalogCategories[index].map((category) => ({ value: category.id, label: category.name }))}
 
