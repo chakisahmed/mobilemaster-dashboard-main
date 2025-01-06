@@ -17,5 +17,18 @@ module.exports = {
           },
       ],
   },
+  // Ensure secure cookies in production
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Set-Cookie',
+            value: 'Secure; HttpOnly; SameSite=Strict',
+          },
+        ],
+      },
+    ];
+  },
 };
-   
