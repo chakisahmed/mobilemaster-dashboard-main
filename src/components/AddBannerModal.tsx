@@ -105,9 +105,15 @@ export default function AddBannerModal({
             let response;
             // Convert image to base64 if there is an image
             if (newBanner.image) {
-                const base64String = await convertToBase64(newBanner.image);
-                console.log('Base64 image:', base64String.substring(0, 100));
-                formData.append('image', base64String);
+                if (newBanner.image instanceof File) {
+                    console.log('Image:', newBanner.image);
+                    const base64String = await convertToBase64(newBanner.image);
+                    console.log('Base64 image:', base64String.substring(0, 100));
+                    formData.append('image', base64String);
+                }
+                else {
+                    //formData.append('image', newBanner.image);
+                }
             }
             console.log('newBanner:', newBanner.id);
 
@@ -185,6 +191,7 @@ export default function AddBannerModal({
                                 isSearchable
                                 isClearable
                                 onInputChange={(inputValue) => setSearchTerm(inputValue)}
+                                value={newBanner.catalog_id ? { value: newBanner.catalog_id, label: newBanner.catalog_id.toString() } : null}
 
 
                             />
@@ -200,10 +207,10 @@ export default function AddBannerModal({
                                     }
                                 }}
                                 className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                required
+                                required={!newBanner.image}
                             />
                             {editMode && newBanner.image && (
-                                <img src={URL.createObjectURL(newBanner.image)} alt="Current Banner" style={{ width: '100px', height: '100px' }} />
+                                <img src={newBanner.image instanceof File ? URL.createObjectURL(newBanner.image) : newBanner.image} alt="Current Banner" style={{ width: undefined, height: '100px' }} />
                             )}
                         </div>
                         <div className="flex justify-end space-x-4">
