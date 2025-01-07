@@ -357,15 +357,17 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerGroup, bannerToEd
           formData.append('status', '1');
           formData.append('layout_type', 'banner2x2-' + bannerGroup.id);
 
-          const base64String = await convertToBase64(image.image);
+          if(image.image && image.image instanceof File) {
+            const base64String = await convertToBase64(image.image);
           console.log('Base64 image:', base64String.substring(0, 100));
           formData.append('image', base64String);
+        }
           console.log(JSON.stringify(Object.fromEntries(formData.entries()), null, 2));
           let response;
 
           if (bannerToEdit) {
             // Update existing image
-            response = await axios.put(`/api/banners/${bannerToEdit.items[i - 1].id}`, formData, {
+            response = await axios.put(`/api/banners/create/${bannerToEdit.items[i - 1].id}`, formData, {
               headers: {
                 'Content-Type': 'application/json',
               },
@@ -378,8 +380,9 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerGroup, bannerToEd
               },
             });
           }
-          let responseimage = response.data.image; // ex: /media/banners/category/1.jpg 
-          //download image to local image folder in public /media/banners/
+          // let responseimage = response.data.image; // ex: /media/banners/category/1.jpg 
+          // //download image to local image folder in public /media/banners/
+          
 
 
           i++;
@@ -391,6 +394,8 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerGroup, bannerToEd
       ]);
 
       setIsModalOpen(false);
+      //refresh the page  
+      //window.location.reload();
     } catch (error: any) {
       console.error('Error creating banner:', error);
     }

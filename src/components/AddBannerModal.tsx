@@ -106,7 +106,7 @@ export default function AddBannerModal({
             // Convert image to base64 if there is an image
             if (newBanner.image) {
                 if (newBanner.image instanceof File) {
-                    console.log('Image:', newBanner.image);
+                    //console.log('Image:', newBanner.image);
                     const base64String = await convertToBase64(newBanner.image);
                     console.log('Base64 image:', base64String.substring(0, 100));
                     formData.append('image', base64String);
