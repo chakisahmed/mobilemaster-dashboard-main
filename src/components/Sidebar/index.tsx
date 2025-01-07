@@ -84,6 +84,7 @@ const menuGroups = [
         route: "#",
         children: [
           { label: "Customize Home Page", route: "/appcreator" },
+          { label: "Manage Home Page Tags", route: "/manage_tags" },
           { label: "Manage Banners", route: "/manage_banners" },
           { label: "Manage Featured Categories", route: "/featuredcategories" },
           { label: "Manage Featured Products", route: "/carousel" },

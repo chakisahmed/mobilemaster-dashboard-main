@@ -1,6 +1,7 @@
 "use client";
 import React, { use, useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { renderLayoutAppearance } from './renderLayoutAppearance';
@@ -286,7 +287,7 @@ const AppCreator = () => {
                 </ul>
 
 
-                <h2 className="text-xl font-bold mb-4">Banner 2x2 Items</h2>
+                <h2 className="text-xl font-bold mb-4">Secondary Banners</h2>
                 <ul>
                     {banner2x2.map((item:any, index) => (
                         <li key={index} className="mb-2 p-2 bg-gray-200 rounded-lg cursor-pointer" onClick={() => addToMiddleList({ ...item, type: 'banner' })}>
@@ -336,7 +337,18 @@ const AppCreator = () => {
                     </div>
                 </div>
                 {/* Screen Container */}
+                
                 <div className="w-11/12 h-full bg-white rounded-2xl overflow-y-scroll p-4">
+                <Image src={"/images/navbar.jpeg"} alt="Preview" layout="responsive" width={120} height={50} />
+                {
+                    <div className="flex justify-around mt-4">
+                        {['Deals of the day', 'Hot deals', 'Best sellers', 'New arrivals'].map((tag, index) => (
+                            <span key={index} className="pb-2 text-sm font-semibold text-black">
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+                }
                     {renderAppPreview()}
                     {/* Scrollable Content */}
                     {/* <div className="flex flex-col mt-4">
