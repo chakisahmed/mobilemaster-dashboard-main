@@ -20,13 +20,15 @@ const Chip: React.FC<{ label: string; onRemove: () => void }> = ({ label, onRemo
     </div>
 );
 const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefresh, selectedItem }) => {
-    const [selectedRows, setSelectedRows] = useState<string[]>(selectedItem ? selectedItem.products.map((p:any) => p.name) : []);
+    const [selectedRows, setSelectedRows] = useState<string[]>(selectedItem ? selectedItem.products.map((p:any) => p.entity_id) : []);
+    console.log('Selected rows:', selectedRows);
     const [name, setName] = useState<string>(selectedItem ? selectedItem.label : '');
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [products, setProducts] = useState<Product[]>([]);
     const [step, setStep] = useState(1);
     const [selectedLayout, setSelectedLayout] = useState<'layout1' | 'layout2' | 'layout3'>(selectedItem ? selectedItem.layout_appearance : 'layout1');
     const [selectedProducts, setSelectedProducts] = useState<{ id: string; name: string }[]>(selectedItem ? selectedItem.products : []);
+    //console.log('Selected products:', selectedProducts);
     const [selectedStartDate, setSelectedStartDate] = useState<string>('');
     const [selectedEndDate, setSelectedEndDate] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -87,13 +89,18 @@ const ProductsListModal: React.FC<ProductsListModalProps> = ({ onClose, onRefres
             };
             console.log('Payload:', payload);
 
-            const response = await axios.post('/api/carousel', payload, {
+            if(selectedItem) {const response = await axios.put('/api/carousel', payload, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });}
+            else {const response = await axios.post('/api/carousel', payload, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            });}
 
-            console.log('Product carousel created:', response.data);
+            //console.log('Product carousel created:', response.data);
             onRefresh();
             onClose();
         } catch (error:any) {
