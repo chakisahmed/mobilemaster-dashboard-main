@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { renderLayoutAppearance } from './renderLayoutAppearance';
+import { getTagsData, TagsType } from '@/utils/tagsApi';
 const ITEM_TYPE = 'ITEM';
 const AppCreator = () => {
     //const [banner2x1, setBanner2x1] = useState([]);
@@ -12,6 +13,7 @@ const AppCreator = () => {
     const [featuredCategories4x1, setFeaturedCategories4x1] = useState([]);
     const [featuredCategories4x2, setFeaturedCategories4x2] = useState([]);
     const [homepagedata, setHomepagedata] = useState([]);
+    const [tags, setTags] = useState<TagsType[]>([]);
     //carousel
     interface CarouselItem {
         id: string;
@@ -77,6 +79,8 @@ const AppCreator = () => {
             const featuredCategories4x1Response = await axios.get('/api/featuredcategories4xn/featuredcategories4x1');
             const featuredCategories4x2Response = await axios.get('/api/featuredcategories4xn/featuredcategories4x2');
             const carouselResponse = await axios.get('/api/carousel');
+            const tagsResponse = await getTagsData();
+            setTags(tagsResponse);
             //setBanner2x1(banner2x1Response.data);
             setBanner2x2(banner2x2Response.data);
             setFeaturedCategories4x1(featuredCategories4x1Response.data);
@@ -342,9 +346,9 @@ const AppCreator = () => {
                 <Image src={"/images/navbar.jpeg"} alt="Preview" layout="responsive" width={120} height={50} />
                 {
                     <div className="flex justify-around mt-4">
-                        {['Deals of the day', 'Hot deals', 'Best sellers', 'New arrivals'].map((tag, index) => (
+                        {tags.map((tag, index) => (
                             <span key={index} className="pb-2 text-sm font-semibold text-black">
-                                {tag}
+                                {tag.name}
                             </span>
                         ))}
                     </div>
