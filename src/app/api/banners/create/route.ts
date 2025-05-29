@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     // Send POST request to external API using axios
-    const response = await axios.post('https://customer.wamia.tn/rest/V1/mobilemaster/banner', body, {
+    const response = await axios.post('https://www.wamia.tn/rest/V1/mobilemaster/banner', body, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
@@ -33,7 +33,7 @@ export async function GET(req: Request) {
     const accessToken = getAccessToken(req);
     
     // Fetch data from the external API using axios
-    const response = await axios.get('https://customer.wamia.tn/rest/V1/mobilemaster/banner', {
+    const response = await axios.get('https://www.wamia.tn/rest/V1/mobilemaster/banner', {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
