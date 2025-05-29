@@ -10,7 +10,7 @@ export async function DELETE(req: Request) {
         const id = url.pathname.split('/').pop();
 
         // Send DELETE request to external API using axios
-        const response = await axios.delete(`https://customer.wamia.tn/rest/V1/mobilemaster/tags/${id}`, {
+        const response = await axios.delete(`https://www.wamia.tn/rest/V1/mobilemaster/tags/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,

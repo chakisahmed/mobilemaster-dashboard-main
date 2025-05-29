@@ -8,7 +8,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 
   try {
     // Send DELETE request to the external API using axios
-    const response = await axios.delete(`https://customer.wamia.tn/rest/V1/mobilemaster/banner/${id}`, {
+    const response = await axios.delete(`https://www.wamia.tn/rest/V1/mobilemaster/banner/${id}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
@@ -30,7 +30,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     const { id } = params;
     try {
       const body = await request.json();
-      const response = await axios.put(`https://customer.wamia.tn/rest/V1/mobilemaster/banner/${id}`, body, {
+      const response = await axios.put(`https://www.wamia.tn/rest/V1/mobilemaster/banner/${id}`, body, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,

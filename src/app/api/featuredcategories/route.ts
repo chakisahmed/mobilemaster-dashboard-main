@@ -7,7 +7,7 @@ export async function GET(req: Request) {
     try {
         const accessToken = getAccessToken(req);
         // Send GET request to external API using axios
-        const response = await axios.get('https://customer.wamia.tn/rest/V1/mobilemaster/featuredcategories', {
+        const response = await axios.get('https://www.wamia.tn/rest/V1/mobilemaster/featuredcategories', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
         const body = await req.json();
 
         // Send POST request to external API using axios
-        const response = await axios.post('https://customer.wamia.tn/rest/V1/mobilemaster/featuredcategories/add', body, {
+        const response = await axios.post('https://www.wamia.tn/rest/V1/mobilemaster/featuredcategories/add', body, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
@@ -59,7 +59,7 @@ export async function PUT(req: Request) {
         const body = await req.json();
 
         // Send PUT request to external API using axios
-        const response = await axios.put(`https://customer.wamia.tn/rest/V1/mobilemaster/featuredcategories/${body.id}`, body, {
+        const response = await axios.put(`https://www.wamia.tn/rest/V1/mobilemaster/featuredcategories/${body.id}`, body, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,

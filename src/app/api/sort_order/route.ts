@@ -6,7 +6,7 @@ export async function GET(req: Request) {
     try {
         const accessToken = await getAccessToken(req);
         // Fetch sort order data from the external API using axios
-        const response = await axios.get('https://customer.wamia.tn/rest/V1/mobilemaster/sortorder', {
+        const response = await axios.get('https://www.wamia.tn/rest/V1/mobilemaster/sortorder', {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
         const { layout_id, label, position, type } = await request.json();
 
         // Post sort order data to the external API using axios
-        const response = await axios.post('https://customer.wamia.tn/rest/V1/mobilemaster/sortorder', {
+        const response = await axios.post('https://www.wamia.tn/rest/V1/mobilemaster/sortorder', {
             'layout_id': layout_id,
             'label': label,
             'position': position,

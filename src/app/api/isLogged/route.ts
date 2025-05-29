@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     if (!accessToken) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    const response = await axios.get('https://customer.wamia.tn/rest/V1/directory/currency', {
+    const response = await axios.get('https://www.wamia.tn/rest/V1/directory/currency', {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log('Data fetched:', response.data); // Logs the fetched data

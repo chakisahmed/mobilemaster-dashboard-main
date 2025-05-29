@@ -11,7 +11,7 @@ export async function GET(req: Request) {
         const layoutType = url.pathname.split('/').pop();
 
         // Send GET request to external API using axios
-        const response = await axios.get(`https://customer.wamia.tn/rest/V1/mobilemaster/featuredcategories4xN/${layoutType}`, {
+        const response = await axios.get(`https://www.wamia.tn/rest/V1/mobilemaster/featuredcategories4xN/${layoutType}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,

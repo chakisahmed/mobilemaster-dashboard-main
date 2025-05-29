@@ -9,7 +9,7 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
         const { id } = params;
 
         // Send DELETE request to external API using axios
-        const response = await axios.delete(`https://customer.wamia.tn/rest/V1/mobilemaster/productcarousel/${id}`, {
+        const response = await axios.delete(`https://www.wamia.tn/rest/V1/mobilemaster/productcarousel/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
@@ -33,7 +33,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
         const body = await req.json();
 
         // Send PUT request to external API using axios
-        const response = await axios.put(`https://customer.wamia.tn/rest/V1/mobilemaster/productcarousel/${id}`, body, {
+        const response = await axios.put(`https://www.wamia.tn/rest/V1/mobilemaster/productcarousel/${id}`, body, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,

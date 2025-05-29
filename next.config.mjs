@@ -1,7 +1,7 @@
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["customer.wamia.tn"],
+    domains: ["www.wamia.tn"],
     remotePatterns: [
       {
         protocol: "https",

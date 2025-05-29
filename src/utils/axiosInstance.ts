@@ -3,7 +3,7 @@ import { parse } from 'cookie';
 import { NextResponse } from 'next/server';
 
 const axiosInstance = axios.create({
-  baseURL: "https://customer.wamia.tn",
+  baseURL: "https://www.wamia.tn",
   headers: {
     'Content-Type': 'application/json',
   },

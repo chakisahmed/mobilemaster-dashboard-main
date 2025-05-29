@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
 
         // Construct the API URL
-        const apiUrl = `https://customer.wamia.tn/graphql`;
+        const apiUrl = `https://www.wamia.tn/graphql`;
 
         // Send GET request to external API using axios
         const response = await axios.post(apiUrl, payload, {

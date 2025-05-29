@@ -3,7 +3,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 
 // Set up Apollo Client
 const client = new ApolloClient({
-  uri: 'https://customer.wamia.tn/graphql', // Replace with your GraphQL endpoint
+  uri: 'https://www.wamia.tn/graphql', // Replace with your GraphQL endpoint
   cache: new InMemoryCache(),
   defaultOptions: {
     query: {

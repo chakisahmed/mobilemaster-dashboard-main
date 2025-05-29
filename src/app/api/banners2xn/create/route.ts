@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   const accessToken = await getAccessToken(request);
   try {
     const { name, order, layout_type } = await request.json();
-    const response = await axios.post('https://customer.wamia.tn/rest/V1/mobilemaster/banner2xn', {
+    const response = await axios.post('https://www.wamia.tn/rest/V1/mobilemaster/banner2xn', {
       'name':name,
       'sort_order':order,
       'layout_type':layout_type,

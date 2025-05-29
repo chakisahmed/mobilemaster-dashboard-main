@@ -3,7 +3,7 @@ module.exports = {
       return [
           {
               source: '/api/rest/:path*',
-              destination: 'https://customer.wamia.tn/rest/:path*',
+              destination: 'https://www.wamia.tn/rest/:path*',
           },
       ];
   },
@@ -11,7 +11,7 @@ module.exports = {
       remotePatterns: [
           {
               protocol: 'https',
-              hostname: 'customer.wamia.tn',
+              hostname: 'www.wamia.tn',
               port: '', 
               pathname: '/media/catalog/product/**', // Match the specific path
           },

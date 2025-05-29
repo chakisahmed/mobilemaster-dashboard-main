@@ -8,7 +8,7 @@ export async function GET(request: Request, { params }: { params: { layout_type:
     const accessToken = await getAccessToken(request);
     const { layout_type } = params;
     try {
-        const response = await axios.get(`https://customer.wamia.tn/rest/V1/mobilemaster/banner2xn/banners/${layout_type}`, {
+        const response = await axios.get(`https://www.wamia.tn/rest/V1/mobilemaster/banner2xn/banners/${layout_type}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
