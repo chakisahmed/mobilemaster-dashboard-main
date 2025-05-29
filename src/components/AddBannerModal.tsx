@@ -97,7 +97,7 @@ export default function AddBannerModal({
         try {
             const formData = new FormData();
             formData.append('name', newBanner.name);
-            formData.append('banner_type', newBanner.banner_type);
+            formData.append('banner_type', catalogType);
             formData.append('layout_type', 'bannerimages');
             formData.append('catalog_id', newBanner.catalog_id.toString());
             formData.append('order', '0'); // Order should be a string to append to FormData
@@ -178,13 +178,15 @@ export default function AddBannerModal({
                             <label className="block text-sm font-medium text-gray-700">Banner Type</label>
                             <CustomSelectGroup options={["product", "category"]} onSelect={handleSelect} />
                         </div>
-                        <div className="mb-4">
+                        {catalogType!="" && <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700">Catalog ID</label>
                             <Select
                                 options={newBanner.banner_type === 'product' ? catalogProducts?.map((product) => ({ value: product.id, label: product.name })) : catalogCategories?.map((category) => ({ value: category.id, label: category.name }))}
                                 onChange={(selectedOption) => {
                                     if (selectedOption) {
-                                        setNewBanner({ ...newBanner, catalog_id: selectedOption.value });
+                                        setNewBanner({ ...newBanner, catalog_id: selectedOption.value, name: selectedOption.label });
+                                        
+
                                     }
                                 }}
                                 placeholder="Select catalog ID"
@@ -196,7 +198,7 @@ export default function AddBannerModal({
 
                             />
                         </div>
-
+}
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700">Image</label>
                             <input

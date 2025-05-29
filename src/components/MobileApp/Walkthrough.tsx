@@ -16,16 +16,16 @@ const Walkthrough: React.FC = () => {
     });
     const [selectedWalkthrough, setSelectedWalkthrough] = useState<WalkthroughType | null>(null);
 
-const handleRowClick = (item: WalkthroughType) => {
-    setSelectedWalkthrough(item);
-    setIsModalOpen(true);
-};
+    const handleRowClick = (item: WalkthroughType) => {
+        setSelectedWalkthrough(item);
+        setIsModalOpen(true);
+    };
 
     const fetchWalkthroughItems = async () => {
         try {
             const data = await getWalkthroughData();
             setWalkthroughItems(data);
-        } catch (error:any) {
+        } catch (error: any) {
             console.error('Error fetching walkthrough items:', error);
         }
     };
@@ -48,7 +48,7 @@ const handleRowClick = (item: WalkthroughType) => {
             const response = await postWalkthroughData(newWalkthrough as WalkthroughType);
             setWalkthroughItems([...walkthroughItems, response]);
             handleCloseModal();
-        } catch (error:any) {
+        } catch (error: any) {
             console.error('Error creating walkthrough item:', error);
         }
     };
@@ -73,7 +73,7 @@ const handleRowClick = (item: WalkthroughType) => {
 
                                 setWalkthroughItems(walkthroughItems.filter((item) => !checkedWalkthroughItems.includes(item)));
                                 setCheckedWalkthroughItems([]);
-                            } catch (error:any) {
+                            } catch (error: any) {
                                 console.error('Error deleting walkthrough items:', error);
                             }
                         }}
@@ -98,16 +98,16 @@ const handleRowClick = (item: WalkthroughType) => {
                     {walkthroughItems.map((item) => (
                         <tr key={item.id} onClick={() => handleRowClick(item)}>
                             <td className="py-2 px-4 border-b text-left">
-                                <input type="checkbox" key={item.id} onChange={
-                                    (e) => {
-                                        console.log(e);
+                                <input type="checkbox" key={item.id} onClick={e => e.stopPropagation()}
+                                    onChange={e => {
                                         if (e.target.checked) {
                                             setCheckedWalkthroughItems([...checkedWalkthroughItems, item]);
                                         } else {
-                                            setCheckedWalkthroughItems(checkedWalkthroughItems.filter((i) => i.id !== item.id));
+                                            setCheckedWalkthroughItems(
+                                                checkedWalkthroughItems.filter(i => i.id !== item.id)
+                                            );
                                         }
-                                    }
-                                } />
+                                    }} />
                             </td>
                             <td className="py-2 px-4 border-b text-left">{item.id}</td>
                             <td className="py-2 px-4 border-b text-left">{item.title}</td>
@@ -120,22 +120,22 @@ const handleRowClick = (item: WalkthroughType) => {
                 </tbody>
             </table>
             {isModalOpen && selectedWalkthrough && (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white p-4 rounded shadow-lg w-1/3">
-            <h2 className="text-xl font-bold mb-4">{selectedWalkthrough.title}</h2>
-            <p>{selectedWalkthrough.description}</p>
-            <img src={selectedWalkthrough.image} alt={selectedWalkthrough.title} className="w-1/2 h-auto object-cover mb-4" />
-            <div className="flex justify-end space-x-2 mt-4">
-                <button
-                    className="bg-gray-500 text-white px-2 py-1 rounded"
-                    onClick={handleCloseModal}
-                >
-                    Close
-                </button>
-            </div>
-        </div>
-    </div>
-)}
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-4 rounded shadow-lg w-1/3">
+                        <h2 className="text-xl font-bold mb-4">{selectedWalkthrough.title}</h2>
+                        <p>{selectedWalkthrough.description}</p>
+                        <img src={selectedWalkthrough.image} alt={selectedWalkthrough.title} className="w-1/2 h-auto object-cover mb-4" />
+                        <div className="flex justify-end space-x-2 mt-4">
+                            <button
+                                className="bg-gray-500 text-white px-2 py-1 rounded"
+                                onClick={handleCloseModal}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             {isModalOpen && !selectedWalkthrough && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-4 rounded shadow-lg w-1/3">

@@ -7,10 +7,12 @@ import DatePickerOne from '../FormElements/DatePicker/DatePickerOne';
 import RichTextEditor from '../WYSIWYG/RichTextEditor';
 import axios from 'axios';
 import BarcodeComponent from '../BarcodeComponent';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 const ProductDetails = () => {
     const searchParams = useSearchParams();
-    const [sku, setSku] = useState<string | undefined>(undefined);
+    const sku = useSelector((state: RootState) => state.activeView.sku);
     const [product, setProduct] = useState<Product>();
     const [currency, setCurrency] = useState<string>('');
 
@@ -20,9 +22,8 @@ const ProductDetails = () => {
             setProduct(res);
             console.log(res.name);
         }; 
-        const sku = searchParams.get('sku');
+
         if (sku) {
-            setSku(sku);
             fetchProduct(sku);
         }
     }, [searchParams]);

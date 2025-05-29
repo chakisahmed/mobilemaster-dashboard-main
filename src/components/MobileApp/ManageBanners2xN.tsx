@@ -6,6 +6,8 @@ import { convertToBase64 } from '../../utils/file_utils';
 import { categoriesByName as categoriesApi, Category } from '@/utils/categoriesApi';
 import { Product, products } from '@/utils/productsApi';
 import Select from 'react-select';
+import { useDispatch } from 'react-redux';
+import { setActiveView } from '@/store/slices/activeViewSlice';
 
 interface Manage2x2BannersProps {
   bannerGroup: any; // Replace 'any' with the appropriate type if known
@@ -16,6 +18,7 @@ const Manage2x2Banners = ({ bannerGroup }: Manage2x2BannersProps) => {
   const [banners, setBanners] = useState<any[]>([]);
   const [selectedBanners, setSelectedBanners] = useState<number[]>([]);
   const [bannerToEdit, setBannerToEdit] = useState(null);
+  const dispatch = useDispatch();
   
 
   const handleDeleteSelected = async () => {
@@ -87,7 +90,10 @@ const Manage2x2Banners = ({ bannerGroup }: Manage2x2BannersProps) => {
           <ul className="flex space-x-2 text-gray-600">
             <li className="flex items-center">
 
-              <a href="/manage-banners" className="hover:underline">Manage Banners</a>
+              <button className="hover:underline" onClick={
+                () => dispatch(setActiveView('manage banners'))
+              
+              }>Manage Banners</button>
               <svg className="w-4 h-4 mx-2 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" />
               </svg>
@@ -95,7 +101,7 @@ const Manage2x2Banners = ({ bannerGroup }: Manage2x2BannersProps) => {
 
 
             <li className="flex items-center">
-              <span className="text-gray-500">Secondary Banners</span>
+              <span className="text-gray-500">Manage Secondary Banners</span>
 
             </li>
 
@@ -411,7 +417,6 @@ const CreateBannerModal = ({ setIsModalOpen, setBanners, bannerGroup, bannerToEd
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              required
               className="border p-2 w-full"
             />
           </label>

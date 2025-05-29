@@ -6,6 +6,8 @@ import { products, Product } from "@/utils/productsApi";
 import { categories, Category } from "@/utils/categoriesApi";
 import Link from "next/link";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setActiveView, setProductDetails } from "@/store/slices/activeViewSlice";
  
 
 const ProductsTable = () => {
@@ -17,6 +19,7 @@ const ProductsTable = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
   const [currency, setCurrency] = useState<string>('');
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchCurrency = async () => {
         const res = await axios.get('/api/isLogged');
@@ -180,7 +183,7 @@ const ProductsTable = () => {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="h-12.5 w-15 rounded-md">
                 <Image
-                  src={"https://customer.wamia.tn/media/catalog/product"+ (product.media_gallery_entries.length>0? product.media_gallery_entries[0].file :"")}
+                  src={"https://www.wamia.tn/media/catalog/product"+ (product.media_gallery_entries.length>0? product.media_gallery_entries[0].file :"")}
                   width={60}
                   height={50}
                   alt="Product"
@@ -219,9 +222,11 @@ const ProductsTable = () => {
             </p>
           </div>
           <div className="col-span-1 flex items-center">
-            <Link className="text-body-sm font-medium text-green" href={`/product?sku=${product.sku}`}>
+            <a className="text-body-sm font-medium text-green" onClick={() => {
+              dispatch(setProductDetails(product.sku));
+            }}>
               View product
-            </Link>
+            </a>
           </div>
 
         </div>
